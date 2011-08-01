@@ -1,0 +1,7 @@
+# Crontab list consists lines in following format
+# PERIOD SERVERS SCRIPT [ARGUMENTS]
+# where:
+# - PERIOD: period in crontab format: min hour day_of_month month day_of_week;
+# - SERVERS: comma separated (without spaces) server list or * wildcard for all deployment list;
+# - SCRIPT: script name relatively cron directory;
+# - ARGUMENTS: script arguments;

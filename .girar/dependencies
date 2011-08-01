@@ -1,0 +1,6 @@
+# Project dependency list consists lines in following format
+# PACKAGE MAJOR[.MINOR]
+# where:
+# - PACKAGE: project repository name (PACKAGE part of /people/USER/PACKAGE.git);
+# - MAJOR: major version of package;
+# - MINOR: minor version of package;

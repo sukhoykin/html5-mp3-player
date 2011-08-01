@@ -1,0 +1,6 @@
+# Build file consists hostname of build server
+# SERVER
+# where:
+# - SERVER: hostname of the server where project will be builded;
+# Server must be added in girar, in specified `build' location.
+# To see server list use girar command "servers".
