@@ -1,10 +1,15 @@
-.fm-player {
+#fm-player {
 	border: 1px dotted #333;
 	width: 368px;
 }
 
+.fm-player #container {
+	display: none;
+}
+
 .fm-player .play {
 	background: url("../img/fm-player/play-pause.png") no-repeat scroll 0 0 transparent;
+	cursor: pointer;
 	width: 32px;
 	height: 32px;
 	position: absolute;
@@ -32,7 +37,6 @@
 
 .fm-player .progress {
 	position: relative;
-	/*width: 336px;*/
 	left: 32px;
 }
 
@@ -53,7 +57,7 @@
 
 .fm-player .progress .bar .load {
 	background-color: #BECBEA;
-	width: 120px;
+	width: 0px;
 	height: 4px;
 	position: absolute;
 	top: 14px;
@@ -61,7 +65,7 @@
 
 .fm-player .progress .bar .playback {
 	background-color: #537CDB;
-	width: 36px;
+	width: 0px;
 	height: 4px;
 	position: absolute;
 	top: 14px;
