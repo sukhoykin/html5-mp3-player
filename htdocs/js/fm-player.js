@@ -15,8 +15,9 @@ function playPause(button)
 {
 	if (audio == null) {
 		
-		$('.container').html('<audio id="audio" preload="metadata" autobuffer></audio>');
+		$('#audio-container').html('<audio id="audio" preload="metadata" autobuffer></audio>');
 		
+		// HTML5 <audio>
 		audio = $('#audio')[0];
 		
 		$(audio).bind('abort', function(){
@@ -144,7 +145,7 @@ function playPause(button)
 
 $(document).ready(function(){
 	// Events seeding
-	$('.play').click(function(){
+	$('#playPause').click(function(){
 		playPause($(this));
 	});
 });

@@ -1,37 +1,40 @@
-#fm-player {
+.fm-player {
 	border: 1px dotted #333;
 	width: 368px;
 }
 
-.fm-player #container {
+.fm-player .button {
+	width: 32px;
+	height: 32px;
+	cursor: pointer;
+}
+
+#audio-container {
 	display: none;
 }
 
-.fm-player .play {
-	background: url("../img/fm-player/play-pause.png") no-repeat scroll 0 0 transparent;
-	cursor: pointer;
-	width: 32px;
-	height: 32px;
+#playPause.button {
+	background: url("../img/fm-player/pixel/play-pause.png") no-repeat scroll 0 0 transparent;
 	position: absolute;
 }
 
-.fm-player .play:hover {
+#playPause.button:hover {
 	background-position: 0 -32px;
 }
 
-.fm-player .play:active {
+#playPause.button:active {
 	background-position: 0 -64px;
 }
 
-.fm-player .pause {
+#playPause.button.pause {
 	background-position: 0 -96px;
 }
 
-.fm-player .pause:hover {
+#playPause.button.pause:hover {
 	background-position: 0 -128px;
 }
 
-.fm-player .pause:active {
+#playPause.button.pause:active {
 	background-position: 0 -160px;
 }
 
@@ -41,21 +44,21 @@
 }
 
 .fm-player .progress .begin {
-	background: url("../img/fm-player/progress-begin.png") no-repeat scroll 0 0;
+	background: url("../img/fm-player/pixel/progress-begin.png") no-repeat scroll 0 0;
 	width: 8px;
 	height: 32px;
 	position: absolute;
 }
 
 .fm-player .progress .bar {
-	background: url("../img/fm-player/progress-bar.png") repeat-x scroll 0 0 transparent;
+	background: url("../img/fm-player/pixel/progress-bar.png") repeat-x scroll 0 0 transparent;
 	width: 320px;
 	height: 32px;
 	position: absolute;
 	left: 8px;
 }
 
-.fm-player .progress .bar .load {
+.fm-player .progress .bar .loaded {
 	background-color: #BECBEA;
 	width: 0px;
 	height: 4px;
@@ -63,7 +66,7 @@
 	top: 14px;
 }
 
-.fm-player .progress .bar .playback {
+.fm-player .progress .bar .played {
 	background-color: #537CDB;
 	width: 0px;
 	height: 4px;
@@ -72,7 +75,7 @@
 }
 
 .fm-player .progress .end {
-	background: url("../img/fm-player/progress-end.png") no-repeat scroll 0 0 transparent;
+	background: url("../img/fm-player/pixel/progress-end.png") no-repeat scroll 0 0 transparent;
 	width: 8px;
 	height: 32px;
 	position: relative;

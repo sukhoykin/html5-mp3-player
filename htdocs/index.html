@@ -2,23 +2,24 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>fmPlayer - Pixel Theme Demo</title>
-<link href="css/fm-player.css" rel="stylesheet" />
-<script type="text/javascript" src="js/jquery-1.6.2.js"></script>
+<title>Pixel Theme Demo</title>
+<link href="css/pixel.css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/fm-player.js"></script>
 </head>
 <body>
-	<div id="fm-player">
-		<div id="container"></div>
-		<div id="play"></div>
-		<div id="progress">
-			<div id="begin"></div>
+	<div class="fm-player">
+		<div id="audio-container">Embed Container</div>
+		<div id="playPause" class="button"></div>
+		<div class="progress">
+			<div class="begin"></div>
 			<div class="bar">
-				<div class="load"></div>
-				<div class="playback"></div>
+				<div id="loaded"></div>
+				<div id="played"></div>
 			</div>
 			<div class="end"></div>
 		</div>
+		<div id="volume" class="button"></div>
 	</div>
 	<div class="debug"></div>
 </body>
