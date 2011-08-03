@@ -1,10 +1,130 @@
-var fm_is_play = false;
+/**
+ * @class fmPlayer
+ * 
+ * TODO: class must be a singleton instance
+ * TODO: cache selector elements for decrease DOM inspection
+ * TODO: player must preload next track in a list while current is playing
+ * TODO: player has to continue play list if stop button was not clicked
+ */
 
+/**
+ * @private
+ */
+var legacy = false;
+
+/**
+ * @private
+ */
 var audio = null;
+
+/**
+ * @public
+ */
+function play(url) {
+	
+}
+
+/**
+ * @public
+ * @param sec
+ */
+function seek(sec)
+{
+	// HTML5 <audio> support:
+	audio = $('#audio').get(0);
+	// else Flash support.
+	
+	/**
+	 * TODO: check buffered range (seek or range request)
+	 * TODO: check seekable range (seek or range request)
+	 */
+	
+	audio.currentTime = sec;
+}
+
+/**
+ * @protected
+ * @param button
+ */
+function playPause(button)
+{
+	if (audio == null) {
+		
+		//audio = $.html('<audio id="audio" preload="metadata" autobuffer></audio>');
+		//$('#audio-container').append(audio);
+		
+		if (!legacy) {
+			$('#audio-container').html('<audio id="audio" preload="metadata" autobuffer></audio>');
+		}
+		
+		// HTML5 <audio> support:
+		audio = $('#audio').get(0);
+		// else Flash support.
+		
+		$(audio).bind('progress', function(){
+			$('#loaded').css('width', parseInt(this.buffered.end(0) / this.duration * $('#bar').width()) + 'px');
+		});
+		
+		$(audio).bind('timeupdate', function(){
+			$('#played').css('width', parseInt(this.currentTime / this.duration * $('#bar').width()) + 'px');
+		});
+		
+		$(audio).bind('canplaythrough', function(){
+			
+			$('#seek').addClass('playing');
+			
+			$('#seek').click(function(e){
+				seek(e.offsetX / $('#bar').width() * audio.duration);
+			});
+			
+			this.play();
+		});
+		
+		$(audio).bind('play', function(){
+			button.addClass('pause');
+		});
+		
+		$(audio).bind('pause', function(){
+			button.removeClass('pause');
+		});
+		
+		audioDebug(audio);
+		
+		//audio.src = '../mp3/sample.mp3';
+		audio.src = '../mp3/stream.mp3';
+		//audio.src = 'http://t.doc-0-0-sj.sj.googleusercontent.com/stream?id=2893ef84fee7220c&itag=25&o=08564193242353898071&ip=0.0.0.0&ipbits=0&expire=1312379026&sparams=id,itag,o,ip,ipbits,expire&signature=AAB4C1B67FE6D606211D9CF2077B79CA9F0E662.1E6331C6EC897A6DAFA6CB98B1228DD39CF998CA&key=sj2';
+		
+	} else {
+		
+		// HTML5 <audio> support:
+		audio = $('#audio').get(0);
+		// else Flash support.
+		
+		if (audio.paused) {
+			audio.play();
+		} else {
+			audio.pause();
+		}
+	}
+}
+
+/**
+ * Business Logic
+ */
+$(document).ready(function(){
+	
+	$('#play-sample').click(function(){
+		play('../mp3/stream.mp3');
+	});
+});
+
+/**
+ * Debug functions
+ */
 
 function debug(str)
 {
-	$('.debug').append(str + '<br />');
+	$('#fm-debug').append(str + '<br />');
 }
 
 function audioDebug(audio)
@@ -81,87 +201,3 @@ function audioDebug(audio)
 		debug('waiting');
 	});
 }
-
-/**
- * TODO: create an object for player + cache selector elements
- * TODO: player must preload next track in a list while current is playing
- * TODO: player has to continue play list if stop button was not clicked
- */
-
-function playPause(button)
-{
-	if (audio == null) {
-		
-		$('#audio-container').html('<audio id="audio" preload="metadata" autobuffer></audio>');
-		
-		// HTML5 <audio> support:
-		audio = $('#audio').get(0);
-		// else Flash support.
-		
-		$(audio).bind('progress', function(){
-			$('#loaded').css('width', parseInt(this.buffered.end(0) / this.duration * $('#bar').width()) + 'px');
-		});
-		
-		$(audio).bind('timeupdate', function(){
-			$('#played').css('width', parseInt(this.currentTime / this.duration * $('#bar').width()) + 'px');
-		});
-		
-		$(audio).bind('canplaythrough', function(){
-			
-			$('#seek').addClass('playing');
-			
-			$('#seek').click(function(e){
-				seek(e.offsetX / $('#bar').width() * audio.duration);
-			});
-			
-			this.play();
-		});
-		
-		$(audio).bind('play', function(){
-			button.addClass('pause');
-		});
-		
-		$(audio).bind('pause', function(){
-			button.removeClass('pause');
-		});
-		
-		audioDebug(audio);
-		
-		//audio.src = '../mp3/sample.mp3';
-		audio.src = '../mp3/stream.mp3';
-		//audio.src = 'http://t.doc-0-0-sj.sj.googleusercontent.com/stream?id=2893ef84fee7220c&itag=25&o=08564193242353898071&ip=0.0.0.0&ipbits=0&expire=1312379026&sparams=id,itag,o,ip,ipbits,expire&signature=AAB4C1B67FE6D606211D9CF2077B79CA9F0E662.1E6331C6EC897A6DAFA6CB98B1228DD39CF998CA&key=sj2';
-		
-	} else {
-		
-		// HTML5 <audio> support:
-		audio = $('#audio').get(0);
-		// else Flash support.
-		
-		if (audio.paused) {
-			audio.play();
-		} else {
-			audio.pause();
-		}
-	}
-}
-
-function seek(sec)
-{
-	// HTML5 <audio> support:
-	audio = $('#audio').get(0);
-	// else Flash support.
-	
-	/**
-	 * TODO: check buffered range (seek or range request)
-	 * TODO: check seekable range (seek or range request)
-	 */
-	
-	audio.currentTime = sec;
-}
-
-$(document).ready(function(){
-	// Events seeding
-	$('#playPause').click(function(){
-		playPause($(this));
-	});
-});
