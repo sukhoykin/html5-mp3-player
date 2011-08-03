@@ -22,24 +22,24 @@
 	background: url("pixel.png") no-repeat scroll 0 0 transparent;
 	width: 32px;
 	height: 32px;
-	cursor: pointer;
-}
-
-#playPause.button.disabled {
-	background-position: 0 0px;
-	cursor: default;
 }
 
 #playPause.button {
-	background-position: 0 -32px;
+	background-position: 0 0px;
 	float: left;
+	cursor: default;
 }
 
-#playPause.button:hover {
+#playPause.button.enabled {
+	background-position: 0 -32px;
+	cursor: pointer;
+}
+
+#playPause.button.enabled:hover {
 	background-position: 0 -64px;
 }
 
-#playPause.button:active {
+#playPause.button.enabled:active {
 	background-position: 0 -96px;
 }
 

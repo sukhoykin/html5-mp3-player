@@ -20,12 +20,64 @@ var audio = null;
 /**
  * @public
  */
-function play(url) {
+function fmPlayer() {
 	
+	if (!legacy) {
+		$('#audio-container').html('<audio id="audio" preload="metadata" autobuffer></audio>');
+	} else {
+		alert('SWF audio is not implemented.');
+	}
+
+	// HTML5 <audio> support:
+	audio = $('#audio').get(0);
+	// else Flash support.
+	
+	//audio = $.html('<audio id="audio" preload="metadata" autobuffer></audio>');
+	//$('#audio-container').append(audio);
+	
+	audioDebug(audio);
+	
+	$(audio).bind('progress', function(){
+		$('#loaded').css('width', parseInt(this.buffered.end(0) / this.duration * $('#bar').width()) + 'px');
+	});
+	
+	$(audio).bind('timeupdate', function(){
+		$('#played').css('width', parseInt(this.currentTime / this.duration * $('#bar').width()) + 'px');
+	});
+	
+	$(audio).bind('canplaythrough', function(){
+		
+		$('#seek').addClass('playing');
+		
+		$('#seek').click(function(e){
+			seek(e.offsetX / $('#bar').width() * audio.duration);
+		});
+		
+		this.play();
+	});
+	
+	$(audio).bind('play', function(){
+		
+		// progress duplicate
+		$('#loaded').css('width', parseInt(this.buffered.end(0) / this.duration * $('#bar').width()) + 'px');
+		
+		button.addClass('pause');
+	});
+	
+	$(audio).bind('pause', function(){
+		button.removeClass('pause');
+	});
 }
 
 /**
  * @public
+ */
+function play(url) {
+	audio.src = url;
+}
+
+/**
+ * @private
  * @param sec
  */
 function seek(sec)
@@ -48,63 +100,10 @@ function seek(sec)
  */
 function playPause(button)
 {
-	if (audio == null) {
-		
-		//audio = $.html('<audio id="audio" preload="metadata" autobuffer></audio>');
-		//$('#audio-container').append(audio);
-		
-		if (!legacy) {
-			$('#audio-container').html('<audio id="audio" preload="metadata" autobuffer></audio>');
-		}
-		
-		// HTML5 <audio> support:
-		audio = $('#audio').get(0);
-		// else Flash support.
-		
-		$(audio).bind('progress', function(){
-			$('#loaded').css('width', parseInt(this.buffered.end(0) / this.duration * $('#bar').width()) + 'px');
-		});
-		
-		$(audio).bind('timeupdate', function(){
-			$('#played').css('width', parseInt(this.currentTime / this.duration * $('#bar').width()) + 'px');
-		});
-		
-		$(audio).bind('canplaythrough', function(){
-			
-			$('#seek').addClass('playing');
-			
-			$('#seek').click(function(e){
-				seek(e.offsetX / $('#bar').width() * audio.duration);
-			});
-			
-			this.play();
-		});
-		
-		$(audio).bind('play', function(){
-			button.addClass('pause');
-		});
-		
-		$(audio).bind('pause', function(){
-			button.removeClass('pause');
-		});
-		
-		audioDebug(audio);
-		
-		//audio.src = '../mp3/sample.mp3';
-		audio.src = '../mp3/stream.mp3';
-		//audio.src = 'http://t.doc-0-0-sj.sj.googleusercontent.com/stream?id=2893ef84fee7220c&itag=25&o=08564193242353898071&ip=0.0.0.0&ipbits=0&expire=1312379026&sparams=id,itag,o,ip,ipbits,expire&signature=AAB4C1B67FE6D606211D9CF2077B79CA9F0E662.1E6331C6EC897A6DAFA6CB98B1228DD39CF998CA&key=sj2';
-		
+	if (audio.paused) {
+		audio.play();
 	} else {
-		
-		// HTML5 <audio> support:
-		audio = $('#audio').get(0);
-		// else Flash support.
-		
-		if (audio.paused) {
-			audio.play();
-		} else {
-			audio.pause();
-		}
+		audio.pause();
 	}
 }
 
@@ -113,8 +112,10 @@ function playPause(button)
  */
 $(document).ready(function(){
 	
-	$('#play-sample').click(function(){
-		play('../mp3/stream.mp3');
+	fmPlayer();
+	
+	$('.playitem').click(function(){
+		play('../mp3/' + this.id + '.mp3');
 	});
 });
 
@@ -127,8 +128,33 @@ function debug(str)
 	$('#fm-debug').append(str + '<br />');
 }
 
+function debugTime(str)
+{
+	$('#fm-debug').append(str);
+}
+
 function audioDebug(audio)
 {
+	$(audio).bind('progress', function(){
+		debug('progress(' + parseInt(audio.buffered.end(0)) + ')');
+	});
+	
+	$(audio).bind('timeupdate', function(){
+		debugTime('.');
+	});
+	
+	$(audio).bind('canplaythrough', function(){
+		debug('canplaythrough');
+	});
+	
+	$(audio).bind('play', function(){
+		debug('play');
+	});
+	
+	$(audio).bind('pause', function(){
+		debug('pause');
+	});
+	
 	$(audio).bind('playing', function(){
 		debug('playing');
 	});

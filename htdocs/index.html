@@ -10,11 +10,11 @@
 <body>
 	<div class="fm-player">
 		<div id="audio-container">Embed Container</div>
-		<div id="playPause" class="button disabled"></div>
-		<div id="volume" class="button disabled"></div> 
+		<div id="playPause" class="button"></div>
+		<div id="volume" class="button"></div> 
 		<div class="progress">
-			<div class="begin disabled"></div>
-			<div class="end disabled"></div>
+			<div class="begin"></div>
+			<div class="end"></div>
 			<div id="bar">
 				<div id="seek">
 					<div id="loaded"></div>
@@ -24,7 +24,10 @@
 		</div>
 	</div>
 	<div id="fm-playlist">
-		<a id="play-sample" href="#sample">Sample</a>
+		<ul>
+			<li><a id="sample" class="playitem" href="#sample">Sample</a></li>
+			<li><a id="stream" class="playitem" href="#stream">Stream</a></li>
+		</ul>
 	</div>
 	<div id="fm-debug"></div>
 	<!-- <div style="border: 1px solid black; height: 16px;">
