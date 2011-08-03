@@ -18,11 +18,11 @@ function audioDebug(audio)
 	});
 	
 	$(audio).bind('canplay', function(){
-		debug('canplay: ' + this.buffered.length);
+		debug('canplay');
 	});
 	
 	$(audio).bind('durationchange', function(){
-		debug('durationchange: ' + this.duration);
+		debug('durationchange');
 	});
 	
 	$(audio).bind('emptied', function(){
@@ -107,6 +107,13 @@ function playPause(button)
 		});
 		
 		$(audio).bind('canplaythrough', function(){
+			
+			$('#seek').addClass('playing');
+			
+			$('#seek').click(function(e){
+				seek(e.offsetX / $('#bar').width() * audio.duration);
+			});
+			
 			this.play();
 		});
 		
@@ -118,10 +125,11 @@ function playPause(button)
 			button.removeClass('pause');
 		});
 		
-		//audioDebug(audio);
+		audioDebug(audio);
 		
 		//audio.src = '../mp3/sample.mp3';
 		audio.src = '../mp3/stream.mp3';
+		//audio.src = 'http://t.doc-0-0-sj.sj.googleusercontent.com/stream?id=2893ef84fee7220c&itag=25&o=08564193242353898071&ip=0.0.0.0&ipbits=0&expire=1312379026&sparams=id,itag,o,ip,ipbits,expire&signature=AAB4C1B67FE6D606211D9CF2077B79CA9F0E662.1E6331C6EC897A6DAFA6CB98B1228DD39CF998CA&key=sj2';
 		
 	} else {
 		
@@ -135,6 +143,20 @@ function playPause(button)
 			audio.pause();
 		}
 	}
+}
+
+function seek(sec)
+{
+	// HTML5 <audio> support:
+	audio = $('#audio').get(0);
+	// else Flash support.
+	
+	/**
+	 * TODO: check buffered range (seek or range request)
+	 * TODO: check seekable range (seek or range request)
+	 */
+	
+	audio.currentTime = sec;
 }
 
 $(document).ready(function(){

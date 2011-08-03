@@ -69,11 +69,12 @@
 }
 
 #seek {
-	background-color: #C2CA00;
 	height: 12px;
 	margin-top: 10px;
+}
+
+#seek.playing {
 	cursor: pointer;
-	z-index: 10;
 }
 
 #loaded {
