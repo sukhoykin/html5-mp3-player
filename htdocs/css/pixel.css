@@ -61,23 +61,32 @@
 	float: right;
 }
 
-.fm-player .progress .bar {
+#bar {
 	background: url("../img/fm-player/pixel/progress-bar.png") repeat-x scroll 0 0 transparent;
 	height: 32px;
 	position: relative;
 	overflow: hidden;
 }
 
+#seek {
+	background-color: #C2CA00;
+	height: 12px;
+	margin-top: 10px;
+	cursor: pointer;
+	z-index: 10;
+}
+
 #loaded {
-	background-color: #BECBEA;
-	width: 0%;
+	background-color: #C2CADC;
+	width: 0px;
 	height: 4px;
-	margin-top: 14px;
+	position: absolute;
+	top: 14px;
 }
 
 #played {
-	background-color: #537CDB;
-	width: 0%;
+	background-color: #F3A120;
+	width: 0px;
 	height: 4px;
 	position: absolute;
 	top: 14px;
