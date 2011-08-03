@@ -1,6 +1,6 @@
 .fm-player {
 	border: 1px dotted #333;
-	width: 368px;
+	/*height: 32px;*/
 }
 
 .fm-player .button {
@@ -15,7 +15,12 @@
 
 #playPause.button {
 	background: url("../img/fm-player/pixel/play-pause.png") no-repeat scroll 0 0 transparent;
-	position: absolute;
+	float: left;
+}
+
+#volume.button {
+	background: url("../img/fm-player/pixel/play-pause.png") no-repeat scroll 0 0 transparent;
+	float: right;
 }
 
 #playPause.button:hover {
@@ -39,45 +44,41 @@
 }
 
 .fm-player .progress {
-	position: relative;
-	left: 32px;
+	height: 100%;
 }
 
 .fm-player .progress .begin {
 	background: url("../img/fm-player/pixel/progress-begin.png") no-repeat scroll 0 0;
 	width: 8px;
 	height: 32px;
-	position: absolute;
-}
-
-.fm-player .progress .bar {
-	background: url("../img/fm-player/pixel/progress-bar.png") repeat-x scroll 0 0 transparent;
-	width: 320px;
-	height: 32px;
-	position: absolute;
-	left: 8px;
-}
-
-.fm-player .progress .bar .loaded {
-	background-color: #BECBEA;
-	width: 0px;
-	height: 4px;
-	position: absolute;
-	top: 14px;
-}
-
-.fm-player .progress .bar .played {
-	background-color: #537CDB;
-	width: 0px;
-	height: 4px;
-	position: absolute;
-	top: 14px;
+	float: left;
 }
 
 .fm-player .progress .end {
 	background: url("../img/fm-player/pixel/progress-end.png") no-repeat scroll 0 0 transparent;
 	width: 8px;
 	height: 32px;
+	float: right;
+}
+
+.fm-player .progress .bar {
+	background: url("../img/fm-player/pixel/progress-bar.png") repeat-x scroll 0 0 transparent;
+	height: 32px;
 	position: relative;
-	left: 328px;
+	overflow: hidden;
+}
+
+#loaded {
+	background-color: #BECBEA;
+	width: 0%;
+	height: 4px;
+	margin-top: 14px;
+}
+
+#played {
+	background-color: #537CDB;
+	width: 0%;
+	height: 4px;
+	position: absolute;
+	top: 14px;
 }

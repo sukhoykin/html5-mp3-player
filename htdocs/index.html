@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Pixel Theme Demo</title>
-<link href="css/pixel.css" rel="stylesheet" />
+<link href="css/float.css" rel="stylesheet" />
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/fm-player.js"></script>
 </head>
@@ -11,16 +11,21 @@
 	<div class="fm-player">
 		<div id="audio-container">Embed Container</div>
 		<div id="playPause" class="button"></div>
+		<div id="volume" class="button"></div> 
 		<div class="progress">
 			<div class="begin"></div>
+			<div class="end"></div>
 			<div class="bar">
 				<div id="loaded"></div>
 				<div id="played"></div>
 			</div>
-			<div class="end"></div>
 		</div>
-		<div id="volume" class="button"></div>
 	</div>
 	<div class="debug"></div>
+	<!-- <div style="border: 1px solid black; height: 16px;">
+		<div style="width: 16px; height: 16px; background-color: green; float: left;"></div>
+		<div style="width: 16px; height: 16px; background-color: red; float: right;"></div>
+		<div style="height: 100%; background-color: blue;"></div>
+	</div> -->
 </body>
 </html>
