@@ -5,12 +5,37 @@
 <title>Pixel Theme</title>
 <link href="css/pixel.css" rel="stylesheet" />
 <script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/fm-audio.js"></script>
+<script type="text/javascript" src="js/fm-native.js"></script>
 <script type="text/javascript" src="js/fm-player.js"></script>
+<script type="text/javascript" src="js/fm-plugin.js"></script>
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		
+		// invoke with default options
+		$('#fm-player').fmPlayer(
+			{
+				volume: 0.8,
+				playlist: [],
+				autoplay: false,
+				layout: {
+					playback: '#playback',
+					seek: '#seek',
+					loaded: '#loaded',
+					played: '#played',
+					volume: '#volume'
+				}
+			}
+		);
+	});
+
+</script>
 </head>
 <body>
-	<div class="fm-player">
-		<div id="audio-container">Embed Container</div>
-		<div id="playPause" class="button"></div>
+	<div class="layout">
+		<div id="fm-player"></div>
+		<div id="playback" class="button"></div>
 		<div id="volume" class="button"></div> 
 		<div class="progress">
 			<div class="begin"></div>
@@ -30,7 +55,22 @@
 		</ul>
 	</div>
 	<div id="fm-debug"></div>
-	<!-- <div style="border: 1px solid black; height: 16px;">
+	<!-- 
+	<script>
+		$.document.ready(function(){
+			
+			player = new fmPlayer(); // disabled, no media url, no buffer
+			player.setPlayPause('#playPause');
+			...
+			player.play(url);
+			
+			player = new fmPlayer(url); // enabled, has media url, no buffer
+			
+			
+			$('#playPause').bindPlayPause();
+		});
+	</script>
+	<div style="border: 1px solid black; height: 16px;">
 		<div style="width: 16px; height: 16px; background-color: green; float: left;"></div>
 		<div style="width: 16px; height: 16px; background-color: red; float: right;"></div>
 		<div style="height: 100%; background-color: blue;"></div>

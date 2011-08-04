@@ -1,8 +1,8 @@
-.fm-player {
+.layout {
 	border: 1px dotted #333;
 }
 
-#audio-container {
+#fm-player {
 	display: none;
 }
 
@@ -13,73 +13,68 @@
 
 #fm-debug {
 	border: 1px dotted #333;
-	height: 200px;
+	height: 400px;
 	margin-top: 3px;
 	overflow: auto;
 }
 
-.fm-player .button {
-	background: url("pixel.png") no-repeat scroll 0 0 transparent;
+.layout .button {
+	background: url("pixel.png") no-repeat scroll 0 0;
 	width: 32px;
 	height: 32px;
 }
 
-#playPause.button {
-	background-position: 0 0px;
+#playback.button {
+	background-position: 0 0;
 	float: left;
 	cursor: default;
 }
 
-#playPause.button.enabled {
+#playback.button.enabled {
 	background-position: 0 -32px;
 	cursor: pointer;
 }
 
-#playPause.button.enabled:hover {
+#playback.button.enabled:hover {
 	background-position: 0 -64px;
 }
 
-#playPause.button.enabled:active {
+#playback.button.enabled:active {
 	background-position: 0 -96px;
 }
 
-#playPause.button.pause {
+#playback.button.pause {
 	background-position: -32px 0px;
 }
 
-#playPause.button.pause:hover {
+#playback.button.pause:hover {
 	background-position: -32px -32px;
 }
 
-#playPause.button.pause:active {
+#playback.button.pause:active {
 	background-position: -32px -64px;
 }
 
-#volume.button {
-	background-position: 0 -32px;
-	float: right;
-}
-
-.fm-player .progress {
+.layout .progress {
 	height: 100%;
 }
 
-.fm-player .progress .begin {
-	background: url("../img/fm-player/pixel/progress-begin.png") no-repeat scroll 0 0;
+.layout .progress .begin {
+	background: url("pixel.png") no-repeat scroll -192px -32px;
 	width: 8px;
 	height: 32px;
 	float: left;
 }
 
-.fm-player .progress .end {
-	background: url("../img/fm-player/pixel/progress-end.png") no-repeat scroll 0 0 transparent;
+.layout .progress .end {
+	background: url("pixel.png") no-repeat scroll -216px -32px;
 	width: 8px;
 	height: 32px;
 	float: right;
 }
 
 #bar {
-	background: url("../img/fm-player/pixel/progress-bar.png") repeat-x scroll 0 0 transparent;
+	background: url("pixel-bar.png") repeat-x scroll 0 0;
 	height: 32px;
 	position: relative;
 	overflow: hidden;
@@ -108,4 +103,9 @@
 	height: 4px;
 	position: absolute;
 	top: 14px;
+}
+
+#volume.button {
+	background-position: -32px -96px;
+	float: right;
 }
