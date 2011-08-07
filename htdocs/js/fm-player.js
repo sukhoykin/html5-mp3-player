@@ -1,79 +1,80 @@
 
 fmPlayer = function (container, options) {
 	
+	var self = this;
+	
 	// TODO: legacy detection
-	var player = new fmNative(container);
+	this.audio = new fmNative(container);
 	//this.player = player;
 	
 	var volumechange = function(player) {
 		
-		if (this.currentVolumeClass != null) {
-			this.volume.removeClass(this.currentVolumeClass);
+		if (self.currentVolumeClass != null) {
+			self.volume.removeClass(self.currentVolumeClass);
 		}
-		alert(currentVolumeClass);
-		this.currentVolumeClass = 'level-' + (Math.ceil(this.player.volume / 2 * 10));
+		alert(Math.ceil(self.audio.volume / 2 * 10));
+		currentVolumeClass = 'level-' + (Math.ceil(self.audio.volume / 2 * 10));
 		
-		this.volume.addClass(this.currentVolumeClass);
+		self.volume.addClass(currentVolumeClass);
 	};
 
 	$.extend(this.options, options);
 	
 	
-	playback = $(this.options.layout.playback);
-	seek = $(this.options.layout.seek);
-	loaded = $(this.options.layout.loaded);
-	played = $(this.options.layout.played);
-	volume = $(this.options.layout.volume);
+	_playback = $(this.options.layout.playback);
+	_seek = $(this.options.layout.seek);
+	_loaded = $(this.options.layout.loaded);
+	_played = $(this.options.layout.played);
+	_volume = $(this.options.layout.volume);
 	
-	if (playback.get(0) != undefined) {
-		this.playback = playback;
+	if (_playback.get(0) != undefined) {
+		this.playback = _playback;
 		//this.playback.bind('click')
 	}
 	
-	if (seek.get(0) != undefined) {
-		this.seek = seek;
+	if (_seek.get(0) != undefined) {
+		this.seek = _seek;
 	}
 	
-	if (loaded.get(0) != undefined) {
-		this.loaded = loaded;
+	if (_loaded.get(0) != undefined) {
+		this.loaded = _loaded;
 	}
 	
-	if (played.get(0) != undefined) {
-		this.played = played;
+	if (_played.get(0) != undefined) {
+		this.played = _played;
 	}
 	
-	if (volume.get(0) != undefined) {
-		this.volume = volume;
+	if (_volume.get(0) != undefined) {
+		this.volume = _volume;
 	}
 	
 	// each fmAudio.event loop
-	$(container).bind('fm-playlist', function(){
+	$(container).bind(fmAudio.event.playlist, function(){
 		alert('fm-playlist');
 	});
 	
+	//this.volumechange2();
 	
+	//$(container).bind('volumechange', this.volumechange2);
+	$(container).bind(fmAudio.event.volumechange, volumechange);
 	
-	$(container).bind('volumechange', function() {
-		volumechange(player);
-	});
-	
-	player.setVolume(this.options.volume);
-	player.setPlaylist(this.options.playlist);
+	this.audio.setVolume(this.options.volume);
+	this.audio.setPlaylist(this.options.playlist);
 	
 	if (this.options.autoplay && this.options.playlist.length) {
-		this.play();
+		this.audio.play();
 	}
 };
 
 fmPlayer.prototype = {
 
-	player: null,
+	audio: null,
 	
-	playback: undefined,
-	seek: undefined,
-	loaded: undefined,
-	played: undefined,
-	volume: undefined,
+	playback: null,
+	seek: null,
+	loaded: null,
+	played: null,
+	volume: null,
 
 	options: {
 		volume: 0.8,
@@ -88,9 +89,5 @@ fmPlayer.prototype = {
 		}
 	},
 	
-	currentVolumeClass: null,
-	
-	play: function() {
-		
-	}
+	currentVolumeClass: null
 };

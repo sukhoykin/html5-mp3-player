@@ -12,7 +12,6 @@ fmAudio = function(container) {
 fmAudio.prototype = {
 	
 	container: null,
-	audio: null,
 	
 	volume: 1,
 	
@@ -31,18 +30,46 @@ fmAudio.prototype = {
 			this.trigger(fmAudio.event.playlist);
 		}
 	},
+	
+	play: function() {
+		alert('fmAudio.play() is not implemented');
+	},
 
 	trigger: function(eventType) {
 		
 		var event = $.Event(eventType);
-		
-		event.player = this;
 		
 		$(this.container).trigger(event);
 	}
 };
 
 fmAudio.event = {
-	playlist: 'fm-playlist',
+	
+	playlist: 'playlist',
+	
+	loadstart: 'loadstart',
+	progress: 'progress',
+	suspend: 'suspend',
+	abort: 'abort',
+	error: 'error',
+	emptied: 'emptied',
+	stalled: 'stalled',
+	
+	loadedmetadata: 'loadedmetadata',
+	loadeddata: 'loadeddata',
+	canplay: 'canplay',
+	canplaythrough: 'canplaythrough',
+	playing: 'playing',
+	waiting: 'waiting',
+	
+	seeking: 'seeking',
+	seeked: 'seeked',
+	ended: 'ended',
+	
+	durationchange: 'durationchange',
+	timeupdate: 'timeupdate',
+	play: 'play',
+	pause: 'pause',
+	ratechange: 'ratechange',
 	volumechange: 'volumechange'
 };
