@@ -1,20 +1,29 @@
-.layout {
-	border: 1px dotted #333;
+html {
+	height: 100%;
+	overflow: hidden;
+}
+
+body {
+	font-family: Verdana, Arial, Sans-Serif;
+	font-size: 12px;
+	margin: 0;
+	overflow: hidden;
+	height: 100%;
+}
+
+.player-layout {
 }
 
 #fm-player {
 	display: none;
 }
 
-#fm-playlist {
-	border: 1px dotted #333;
-	margin-top: 3px;
-}
-
 #fm-debug {
 	border: 1px dotted #333;
-	height: 400px;
-	width: 100px;
+	font-family: Arial;
+	font-size: 10px;
+	height: 600px;
+	width: 200px;
 	float: left;
 	margin-top: 3px;
 	overflow: auto;
@@ -22,14 +31,14 @@
 
 #fm-debug-audio {
 	border: 1px dotted #333;
-	/*height: 400px;*/
-	/*float: left;*/
-	margin-left: 3px;
+	font-family: Arial;
+	font-size: 10px;
+	height: 600px;
 	margin-top: 3px;
-	/*overflow: auto;*/
+	overflow: hidden;
 }
 
-.layout .button {
+.player-layout .button {
 	background: url("pixel.png") no-repeat scroll 0 0;
 	width: 32px;
 	height: 32px;
@@ -66,22 +75,38 @@
 	background-position: -32px -64px;
 }
 
-.layout .progress {
+.player-layout .progress {
 	height: 100%;
 }
 
-.layout .progress .begin {
+#begin {
 	background: url("pixel.png") no-repeat scroll -192px -32px;
 	width: 8px;
 	height: 32px;
 	float: left;
 }
 
-.layout .progress .end {
+#begin.enabled {
+	background-position: -192px -64px;
+}
+
+#begin.enabled.hover {
+	background-position: -192px -96px;
+}
+
+#end {
 	background: url("pixel.png") no-repeat scroll -216px -32px;
 	width: 8px;
 	height: 32px;
 	float: right;
+}
+
+#end.enabled {
+	background-position: -216px -64px;
+}
+
+#end.enabled.hover {
+	background-position: -216px -96px;
 }
 
 #bar {
@@ -89,6 +114,14 @@
 	height: 32px;
 	position: relative;
 	overflow: hidden;
+}
+
+#bar.enabled {
+	background-position: 0 -32px;
+}
+
+#bar.enabled:hover {
+	background-position: 0 -64px;
 }
 
 #seek {
@@ -101,22 +134,83 @@
 }
 
 #loaded {
-	background-color: #C2CADC;
+	background-color: #CBD2E2;
 	width: 0px;
-	height: 4px;
+	height: 8px;
 	position: absolute;
-	top: 14px;
+	top: 12px;
 }
 
 #played {
-	background-color: #F3A120;
+	background: url("pixel-play.png") repeat-x scroll 0 0;
 	width: 0px;
-	height: 4px;
+	height: 8px;
 	position: absolute;
-	top: 14px;
+	top: 12px;
 }
 
 #volume.button {
 	background-position: -32px -96px;
 	float: right;
+}
+
+#volume.button.level-1 {
+	background-position: -128px 0;
+}
+
+#volume.button.level-1:hover {
+	background-position: -128px -32px;
+}
+
+#volume.button.level-2 {
+	background-position: -128px -64px;
+}
+
+#volume.button.level-2:hover {
+	background-position: -128px -96px;
+}
+
+#volume.button.level-3 {
+	background-position: -160px 0;
+}
+
+#volume.button.level-3:hover {
+	background-position: -160px -32px;
+}
+
+#volume.button.level-4 {
+	background-position: -160px -64px;
+}
+
+#volume.button.level-4:hover {
+	background-position: -160px -96px;
+}
+
+#volume.button.level-5 {
+	background-position: -192px 0;
+}
+
+.playlist-layout {
+	height: 100%;
+}
+
+.playlist-layout .left {
+	background-color: #333;
+	width: 10%;
+	height: 100%;
+	float: left;
+}
+
+.playlist-layout .right {
+	background-color: #333;
+	width: 10%;
+	height: 100%;
+	float: right;
+}
+
+.playlist-layout .playlist {
+	background-color: #000;
+	color: #fff;
+	height: 100%;
+	overflow: hidden;
 }

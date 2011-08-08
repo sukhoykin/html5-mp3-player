@@ -8,7 +8,7 @@ fmNative = function(container) {
 	
 	fmAudio.call(this, container);
 	
-	this.audio = $('<audio />');
+	this.audio = $('<audio />').get(0);
 	
 	$(this.audio)
 		.attr('preload', 'metadata')
@@ -21,29 +21,54 @@ fmNative = function(container) {
 	});
 	
 	$(this.container).html(this.audio);
+	
+	this.debugAudio();
 };
 
 fmNative.prototype = new fmAudio;
 
 fmNative.prototype.setVolume = function(volume) {
-
-	fmAudio.prototype.setVolume.call(this, volume);
-	
-	if (this.audio.volume != undefined) {
-		
-	} else {
-		this.trigger(fmAudio.event.volumechange);
-	}
+	this.audio.volume = volume;
 };
 
+fmNative.prototype.getVolume = function() {
+	return Math.round(this.audio.volume * 100) / 100;
+};
+
+fmNative.prototype.setMedia = function(src) {
+	this.audio.src = src;
+};
+
+fmNative.prototype.getMedia = function() {
+	return (this.audio.src == '' ? null : this.audio.src); 
+};
+
+fmNative.prototype.getBuffered = function() {
+	return this.audio.buffered.end(0);
+};
+
+fmNative.prototype.getDuration = function() {
+	return this.audio.duration;
+};
+
+fmNative.prototype.getCurrentTime = function() {
+	return this.audio.currentTime;
+},
+
+fmNative.prototype.isPaused = function() {
+	return this.audio.paused;
+},
+
 fmNative.prototype.play = function() {
-	
-	if (this.audio.src == undefined) {
-		
-		this.audio.src = this.playlist[0];
-		this.audio.play();
-	}
-	
+	this.audio.play();
+};
+
+fmNative.prototype.pause = function() {
+	this.audio.pause();
+};
+
+fmNative.prototype.setCurrentTime = function(currentTime) {
+	this.audio.currentTime = currentTime;
 };
 
 //debug trigger
@@ -57,13 +82,14 @@ fmNative.prototype.trigger = function(eventType) {
 };
 
 fmNative.prototype.debugAudio = function() {
+	
 	$('#fm-debug-audio').html(
-		'<div>:src ' + this.audio.src + '</div>' +
-		'<div>:currentSrc ' + this.audio.currentSrc + '</div>' +
+		'<div>src: ' + this.audio.src + '</div>' +
+		'<div>currentSrc: ' + this.audio.currentSrc + '</div>' +
 		'<div>networkState: ' + this.audio.networkState + '</div>' +
 		'<div>preload: ' + this.audio.preload + '</div>' +
 		(
-			this.audio.buffered != undefined
+			this.audio.buffered.length
 			? 
 				'<div>buffered.length: ' + this.audio.buffered.length + '</div>' +
 				'<div>buffered.start(0): ' + this.audio.buffered.start(0) + '</div>' +
@@ -83,7 +109,7 @@ fmNative.prototype.debugAudio = function() {
 		'<div>defaultPlaybackRate: ' + this.audio.defaultPlaybackRate + '</div>' +
 		'<div>playbackRate: ' + this.audio.playbackRate + '</div>' +
 		(
-			this.audio.played != undefined
+			this.audio.played.length
 			? 
 				'<div>played.length: ' + this.audio.played.length + '</div>' +
 				'<div>played.start(0): ' + this.audio.played.start(0) + '</div>' +
@@ -94,7 +120,7 @@ fmNative.prototype.debugAudio = function() {
 				'<div>played.end(0): undefined</div>'
 		) +
 		(
-			this.audio.seekable != undefined
+			this.audio.seekable.length
 			? 
 				'<div>seekable.length: ' + this.audio.seekable.length + '</div>' +
 				'<div>seekable.start(0): ' + this.audio.seekable.start(0) + '</div>' +

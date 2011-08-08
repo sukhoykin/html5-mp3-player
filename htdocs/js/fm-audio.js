@@ -12,27 +12,49 @@ fmAudio = function(container) {
 fmAudio.prototype = {
 	
 	container: null,
-	
-	volume: 1,
-	
-	playlist: [],
-	currentTrack: 0,
 
 	setVolume: function(volume) {
-		this.volume = volume;
+		alert('fmAudio.setVolume() is not implemented');
+	},
+
+	getVolume: function() {
+		alert('fmAudio.getVolume() is not implemented');
 	},
 	
-	setPlaylist: function(playlist) {
-		
-		this.playlist = playlist;
-		
-		if (this.playlist.length) {
-			this.trigger(fmAudio.event.playlist);
-		}
+	setMedia: function(src) {
+		alert('fmAudio.src() is not implemented');
+	},
+	
+	getMedia: function() {
+		alert('fmAudio.getMedia() is not implemented');
+	},
+	
+	getBuffered: function() {
+		alert('fmAudio.getBuffered() is not implemented');
+	},
+	
+	getDuration: function() {
+		alert('fmAudio.getDuration() is not implemented');
+	},
+	
+	getCurrentTime: function() {
+		alert('fmAudio.getCurrentTime() is not implemented');
+	},
+	
+	isPaused: function() {
+		alert('fmAudio.isPaused() is not implemented');
 	},
 	
 	play: function() {
 		alert('fmAudio.play() is not implemented');
+	},
+	
+	pause: function() {
+		alert('fmAudio.pause() is not implemented');
+	},
+	
+	setCurrentTime: function(sec) {
+		alert('fmAudio.setCurrentTime() is not implemented');
 	},
 
 	trigger: function(eventType) {
@@ -44,8 +66,6 @@ fmAudio.prototype = {
 };
 
 fmAudio.event = {
-	
-	playlist: 'playlist',
 	
 	loadstart: 'loadstart',
 	progress: 'progress',

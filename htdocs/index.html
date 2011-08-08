@@ -14,13 +14,16 @@
 	$(document).ready(function(){
 		
 		// invoke with default options
-		$('#fm-player').fmPlayer(
+		var player = $('#fm-player').fmPlayer(
 			{
 				volume: 0.8,
-				playlist: ['../mp3/stream.mp3'],
-				autoplay: true,
+				playlist: [],
+				autoplay: false,
 				layout: {
 					playback: '#playback',
+					begin: '#begin',
+					end: '#end',
+					bar: '#bar',
 					seek: '#seek',
 					loaded: '#loaded',
 					played: '#played',
@@ -33,13 +36,13 @@
 </script>
 </head>
 <body>
-	<div class="layout">
+	<div class="player-layout">
 		<div id="fm-player"></div>
 		<div id="playback" class="button"></div>
 		<div id="volume" class="button"></div> 
 		<div class="progress">
-			<div class="begin"></div>
-			<div class="end"></div>
+			<div id="begin"></div>
+			<div id="end"></div>
 			<div id="bar">
 				<div id="seek">
 					<div id="loaded"></div>
@@ -48,13 +51,12 @@
 			</div>
 		</div>
 	</div>
-	<div id="fm-playlist">
-		<ul>
-			<li><a id="sample" class="playitem" href="#sample">Sample</a></li>
-			<li><a id="stream" class="playitem" href="#stream">Stream</a></li>
-		</ul>
+	<div class="playlist-layout">
+		<div class="left"></div>
+		<div class="right"></div>
+		<div class="playlist"></div>
 	</div>
-	<div id="fm-debug"></div>
-	<div id="fm-debug-audio"></div>
+	<!--  <div id="fm-debug"></div>
+	<div id="fm-debug-audio"></div>-->
 </body>
 </html>

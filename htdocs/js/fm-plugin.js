@@ -2,9 +2,9 @@
 	
 	$.fn.fmPlayer = function (options) {
 		
-		new fmPlayer(this, options);
+		//$.data(this, 'fmPlayer', new fmPlayer(this, options));
 		
-		return this;
+		return new fmPlayer(this, options);
 	};
 	
 })( jQuery );
