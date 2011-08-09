@@ -1,6 +1,8 @@
 
 /**
  * Native <audio> implementation.
+ * 
+ * @author vadim
  */
 fmNative = function(container) {
 	
@@ -36,7 +38,7 @@ fmNative.prototype.getVolume = function() {
 };
 
 fmNative.prototype.setMedia = function(src) {
-	this.audio.src = src;
+	this.audio.src = (src == undefined ? null : src);
 };
 
 fmNative.prototype.getMedia = function() {
@@ -76,9 +78,11 @@ fmNative.prototype.trigger = function(eventType) {
 	
 	fmAudio.prototype.trigger.call(this, eventType);
 	
+	this.debugAudio();
+	
+	if (eventType == 'timeupdate') return;
 	//debug
 	$('#fm-debug').append(eventType + '<br />');
-	this.debugAudio();
 };
 
 fmNative.prototype.debugAudio = function() {
@@ -89,7 +93,7 @@ fmNative.prototype.debugAudio = function() {
 		'<div>networkState: ' + this.audio.networkState + '</div>' +
 		'<div>preload: ' + this.audio.preload + '</div>' +
 		(
-			this.audio.buffered.length
+			(this.audio.buffered != undefined && this.audio.buffered.length)
 			? 
 				'<div>buffered.length: ' + this.audio.buffered.length + '</div>' +
 				'<div>buffered.start(0): ' + this.audio.buffered.start(0) + '</div>' +
@@ -109,7 +113,7 @@ fmNative.prototype.debugAudio = function() {
 		'<div>defaultPlaybackRate: ' + this.audio.defaultPlaybackRate + '</div>' +
 		'<div>playbackRate: ' + this.audio.playbackRate + '</div>' +
 		(
-			this.audio.played.length
+			(this.audio.played != undefined && this.audio.played.length)
 			? 
 				'<div>played.length: ' + this.audio.played.length + '</div>' +
 				'<div>played.start(0): ' + this.audio.played.start(0) + '</div>' +
@@ -120,7 +124,7 @@ fmNative.prototype.debugAudio = function() {
 				'<div>played.end(0): undefined</div>'
 		) +
 		(
-			this.audio.seekable.length
+				(this.audio.seekable != undefined && this.audio.seekable.length)
 			? 
 				'<div>seekable.length: ' + this.audio.seekable.length + '</div>' +
 				'<div>seekable.start(0): ' + this.audio.seekable.start(0) + '</div>' +

@@ -11,7 +11,12 @@ body {
 	height: 100%;
 }
 
+a:visited {
+	color: #00f;
+}
+
 .player-layout {
+	height: 32px;
 }
 
 #fm-player {
@@ -22,7 +27,7 @@ body {
 	border: 1px dotted #333;
 	font-family: Arial;
 	font-size: 10px;
-	height: 600px;
+	height: 370px;
 	width: 200px;
 	float: left;
 	margin-top: 3px;
@@ -33,7 +38,7 @@ body {
 	border: 1px dotted #333;
 	font-family: Arial;
 	font-size: 10px;
-	height: 600px;
+	height: 370px;
 	margin-top: 3px;
 	overflow: hidden;
 }
@@ -191,26 +196,82 @@ body {
 }
 
 .playlist-layout {
-	height: 100%;
+	/*height: 100%;*/
 }
 
 .playlist-layout .left {
-	background-color: #333;
-	width: 10%;
+	width: 25%;
 	height: 100%;
 	float: left;
 }
 
+.playlist-layout h2 {
+	font-size: 16px;
+}
+
+.playlist-layout .left h2 {
+	margin-left: 6px;
+}
+
+.playlist-layout .playlist {
+	height: 100%;
+	overflow: hidden;
+}
+
 .playlist-layout .right {
-	background-color: #333;
-	width: 10%;
+	width: 25%;
 	height: 100%;
 	float: right;
 }
 
-.playlist-layout .playlist {
+#fm-playlist {
+	height: 100%;
+	overflow: auto;
+}
+
+#fm-playlist .playtable {
+	width: 100%;
+	-moz-user-select: none';
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+#fm-playlist .playtable .header {
 	background-color: #000;
 	color: #fff;
-	height: 100%;
-	overflow: hidden;
+}
+
+#fm-playlist .playtable .playing-col {
+	border-right: 1px solid #ccc;
+	width: 24px;
+}
+
+#fm-playlist .playtable .artist-col {
+	border-right: 1px solid #ccc;
+	padding: 4px;
+}
+
+#fm-playlist .playtable .title-col {
+	padding: 4px;
+}
+
+#fm-playlist .playtable .item td {
+	padding: 4px;
+	cursor: default;
+}
+
+#fm-playlist .playtable .item:hover {
+	background-color: #CBD2E2;
+}
+
+#fm-playlist .playtable .item .playing {
+	background: url("pixel-playlist.png") no-repeat scroll 0 0;
+	width: 16px;
+	height: 14px;
+}
+
+#fm-playlist .playtable .item .paused {
+	background: url("pixel-playlist.png") no-repeat scroll 0 -14px;
+	width: 16px;
+	height: 14px;
 }

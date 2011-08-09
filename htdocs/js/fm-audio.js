@@ -1,7 +1,9 @@
 
 /**
- * Audio Interface.
+ * Audio interface.
+ * 
  * @abstract
+ * @author vadim
  */
 
 fmAudio = function(container) {

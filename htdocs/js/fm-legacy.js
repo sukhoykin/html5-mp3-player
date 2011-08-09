@@ -1,6 +1,8 @@
 
 /**
  * Legacy Flash implementation.
+ * 
+ * @author vadim
  */
 
 fmLegacy = function(container, playlist) {

@@ -1,4 +1,33 @@
 
+/**
+ * fmPlayer plugin for jQuery.
+ * 
+ * Usage:
+ * $(id).fmPlayer([options]);
+ * 
+ * Get instance:
+ * $(id).data(id);
+ * 
+ * @author vadim
+ */
+(function ( $ ) {
+	
+	$.fn.fmPlayer = function (options) {
+		
+		this.each(function(){
+			$.data(this, this.id, new fmPlayer(this, options));
+		});
+		
+		return this;
+	};
+	
+})( jQuery );
+
+/**
+ * Player component.
+ * 
+ * @author vadim
+ */
 fmPlayer = function (container, options) {
 	
 	var self = this;
@@ -62,7 +91,6 @@ fmPlayer = function (container, options) {
 	var canplaythrough = function() {
 		
 		self._seek.addClass('playing');
-		self._seek.click(function(e){seekClick(e);});
 		
 		self.audio.play();
 	};
@@ -72,6 +100,11 @@ fmPlayer = function (container, options) {
 		progress();
 		
 		self.played.css('width', parseInt(self.audio.getCurrentTime() / self.audio.getDuration() * $(self.options.layout.bar).width()) + 'px');
+	};
+	
+	var ended = function() {
+		
+		self.next();
 	};
 
 	$.extend(this.options, options);
@@ -86,7 +119,8 @@ fmPlayer = function (container, options) {
 	this.volume = $(this.options.layout.volume);
 	
 	this.playback.click(playbackClick);
-	this.bar.hover(barHoverIn, barHoverOut);	
+	this.bar.hover(barHoverIn, barHoverOut);
+	this._seek.click(function(e){seekClick(e);});
 	this.volume.click(function(e){volumeClick(e);});
 	this.volume.dblclick(volumeDoubleClick);
 	
@@ -94,18 +128,20 @@ fmPlayer = function (container, options) {
 	$(container).bind(fmAudio.event.progress, progress);
 	$(container).bind(fmAudio.event.canplaythrough, canplaythrough);
 	$(container).bind(fmAudio.event.timeupdate, timeupdate);
+	$(container).bind(fmAudio.event.ended, ended);
 	
 	this.audio.setVolume(this.options.volume);
 	this.setPlaylist(this.options.playlist);
 	
 	if (this.options.autoplay && this.options.playlist.length) {
-		this.play();
 		volumechange();
+		this.play();
 	}
 };
 
 fmPlayer.event = {
-	playlist: 'playlist'
+	playlist: 'playlist',
+	stop: 'stop'
 };
 
 fmPlayer.prototype = {
@@ -164,15 +200,20 @@ fmPlayer.prototype = {
 		this.audio.trigger(fmPlayer.event.playlist);
 	},
 	
+	getCurrentTrack: function() {
+		return this.currentTrack;
+	},
+	
 	play: function(track) {
 		
-		if (this.playlist.length) {
+		if (track == undefined) {
+			track = 0;
+		}
+		
+		if (track < this.playlist.length) {
 			
-			if (track == undefined) {
-				track = 0;
-			}
+			this.currentTrack = parseInt(track);
 			
-			this.currentTrack = track;
 			this.audio.setMedia(this.playlist[track]);
 			
 			this.playback.addClass('pause');
@@ -199,11 +240,35 @@ fmPlayer.prototype = {
 	
 	seek: function(sec) {
 		
-		this.audio.setCurrentTime(sec);
+		if (this.audio.getMedia() != null) {
+			
+			this.audio.setCurrentTime(sec);
+		}
 	},
 	
 	next: function() {
 		
-		this.play(this.currentTrack + 1);
+		if (this.currentTrack + 1 < this.playlist.length) {
+			
+			this.play(this.currentTrack + 1);
+			
+		} else {
+			this.stop();
+		}
+	},
+	
+	stop: function() {
+		
+		if (this.audio.getMedia() != null) {
+			
+			this.audio.setMedia();
+			
+			this.playback.removeClass('pause');
+			this._seek.removeClass('playing');
+			this.loaded.css('width', '0');
+			this.played.css('width', '0');
+			
+			this.audio.trigger(fmPlayer.event.stop);
+		}
 	}
 };
