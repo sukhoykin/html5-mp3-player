@@ -1,1 +1,1 @@
-/usr/share/php/girar/packages/jQuery-1.6.3/jquery.js
+/home/projects/points/fm-player/jQuery/jquery.js
