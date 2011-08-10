@@ -1,1 +1,1 @@
-../../../jQuery/htdocs/js/jquery.js
+../../../jQuery/jquery.js

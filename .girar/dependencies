@@ -4,3 +4,4 @@
 # - PACKAGE: project repository name (PACKAGE part of /people/USER/PACKAGE.git);
 # - MAJOR: major version of package;
 # - MINOR: minor version of package;
+jQuery 1.6
