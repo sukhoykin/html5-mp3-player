@@ -8,6 +8,19 @@
  * Get instance:
  * $(id).data(id);
  * 
+ * TODO: errors processing
+ * TODO: prev/next button
+ * TODO: loop track
+ * TODO: loop playlist
+ * TODO: shuffle
+ * TODO: full preload
+ * TODO: playlist scroll
+ * TODO: favicon (play/pause)
+ * TODO: seek + load part
+ * TODO: flash implementation
+ * TODO: seek button
+ * TODO: currentTime/duration
+ * 
  * @author vadim
  */
 (function ( $ ) {
