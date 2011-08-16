@@ -35,10 +35,14 @@ fmPlaylist = function (container, player, options) {
 	var play = function() {
 		
 		if (self.currentTrack != null) {
+			self.currentTrackRow.removeClass('playing');
 			self.currentTrack.empty();
 		}
 		
-		self.currentTrack = $($(self.tbody.children('#track-number-' + self.player.getCurrentTrack()).get(0)).children().get(0));
+		self.currentTrackRow = $(self.tbody.children('#track-number-' + self.player.getCurrentTrack()).get(0));
+		
+		self.currentTrackRow.addClass('playing');
+		self.currentTrack = $(self.currentTrackRow.children().get(0));
 		
 		self.currentTrack.html('<div class="playing"></div>');
 	};
@@ -48,12 +52,20 @@ fmPlaylist = function (container, player, options) {
 		self.currentTrack.html('<div class="paused"></div>');
 	};
 	
+	var stop = function() {
+		
+		self.currentTrack.empty();
+		self.currentTrackRow.removeClass('playing');
+		
+		self.currentTrack = null;
+		self.currentTrackRow = null;
+	};
+	
 	$.extend(this.options, options);
 	
 	player.bind('play', play);
 	player.bind('pause', pause);
-	
-	this.caption = $(this.options.layout.caption);
+	player.bind('stop', stop);
 };
 
 fmPlaylist.prototype = {
@@ -61,18 +73,15 @@ fmPlaylist.prototype = {
 	player: null,
 	container: null,
 
-	caption: null,
 	playtable: null,
 	tbody: null,
 	
 	options: {
-		layout: {
-			caption: '#caption'
-		}
 	},
 	
 	playlist: null,
 	currentTrack: null,
+	currentTrackRow: null,
 	
 	trackDoubleClick: function(track) {
 		this.player.play(track);
@@ -104,7 +113,6 @@ fmPlaylist.prototype = {
 			playlist.push(source);
 		});
 		
-		this.caption.text(this.playlist.caption);
 		this.player.setPlaylist(playlist);
 		
 		$(this.container).html(this.playtable);

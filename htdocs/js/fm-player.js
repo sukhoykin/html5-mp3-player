@@ -1,12 +1,14 @@
 
 /**
- * fmPlayer plugin for jQuery.
+ * MP3 Player with playlist support. Player use html and flash solutions for 
+ * media playback. If browser support <audio> and MP3 playback the html
+ * solution will be used, otherwise flash.
  * 
- * Usage:
+ * Plugin for jQuery usage: 
+ * id = '#fm-player-container';
  * $(id).fmPlayer([options]);
- * 
- * Get instance:
- * $(id).data(id);
+ * ...
+ * player = $(id).data(id);
  * 
  * TODO: errors processing
  * TODO: prev/next button
@@ -20,7 +22,8 @@
  * TODO: flash implementation
  * TODO: seek button
  * TODO: currentTime/duration
- * 
+ * TODO: playlist-html-js: donor as diplay none blocks from HTML to JS
+ * TODO: scroll playlist to playing track
  * @author vadim
  */
 (function ( $ ) {
@@ -45,11 +48,15 @@ fmPlayer = function (container, options) {
 	
 	var self = this;
 	
-	this.audio = new fmNative(container);
+	if (fmNative.isSupported()) {
+		this.audio = new fmNative(container);
+	} else {
+		alert('Your browser can`t playback MP3 using <audio>. Legacy Flash solution is not implemented.');
+	}
 	
 	var playbackClick = function() {
 		
-		if (self.audio.getMedia() == null) {
+		if (!self.audio.hasMedia()) {
 			
 			self.play();
 			
@@ -60,6 +67,14 @@ fmPlayer = function (container, options) {
 		} else {
 			self.pause();
 		}
+	};
+	
+	var prevClick = function() {
+		self.prev();
+	};
+	
+	var nextClick = function() {
+		self.next();
 	};
 	
 	var seekClick = function(e) {
@@ -82,6 +97,48 @@ fmPlayer = function (container, options) {
 	
 	var volumeDoubleClick = function() {
 		self.audio.setVolume(0);
+	};
+	
+	var playlist = function() {
+		
+		if (self.playlist.length) {
+			
+			self.playback.addClass('enabled');
+			self._prev.addClass('enabled');
+			self._next.addClass('enabled');
+			self.begin.addClass('enabled');
+			self.end.addClass('enabled');
+			self.bar.addClass('enabled');
+			
+		} else {
+			
+			self.playback.removeClass('enabled');
+			self._prev.removeClass('enabled');
+			self._next.removeClass('enabled');
+			self.begin.removeClass('enabled');
+			self.end.removeClass('enabled');
+			self.bar.removeClass('enabled');
+		}
+	};
+	
+	var media = function() {
+		self.playback.addClass('pause');
+	};
+	
+	var play = function() {
+		self.playback.addClass('pause');
+	};
+	
+	var pause = function() {
+		self.playback.removeClass('pause');
+	};
+	
+	var stop = function() {
+		
+		self.playback.removeClass('pause');
+		self._seek.removeClass('playing');
+		self.loaded.css('width', '0');
+		self.played.css('width', '0');
 	};
 	
 	var volumechange = function() {
@@ -119,10 +176,16 @@ fmPlayer = function (container, options) {
 		
 		self.next();
 	};
+	
+	var error = function() {
+		alert('Media error code: ' + self.audio.getErrorCode());
+	};
 
 	$.extend(this.options, options);
 	
 	this.playback = $(this.options.layout.playback);
+	this._prev = $(this.options.layout.prev);
+	this._next = $(this.options.layout.next);
 	this.begin = $(this.options.layout.begin);
 	this.end = $(this.options.layout.end);
 	this.bar = $(this.options.layout.bar);
@@ -132,16 +195,24 @@ fmPlayer = function (container, options) {
 	this.volume = $(this.options.layout.volume);
 	
 	this.playback.click(playbackClick);
+	this._prev.click(prevClick);
+	this._next.click(nextClick);
 	this.bar.hover(barHoverIn, barHoverOut);
 	this._seek.click(function(e){seekClick(e);});
 	this.volume.click(function(e){volumeClick(e);});
 	this.volume.dblclick(volumeDoubleClick);
 	
+	$(container).bind(fmPlayer.event.playlist, playlist);
+	$(container).bind(fmPlayer.event.media, media);
+	$(container).bind(fmAudio.event.play, play);
+	$(container).bind(fmAudio.event.pause, pause);
+	$(container).bind(fmPlayer.event.stop, stop);
 	$(container).bind(fmAudio.event.volumechange, volumechange);
 	$(container).bind(fmAudio.event.progress, progress);
 	$(container).bind(fmAudio.event.canplaythrough, canplaythrough);
 	$(container).bind(fmAudio.event.timeupdate, timeupdate);
 	$(container).bind(fmAudio.event.ended, ended);
+	$(container).bind(fmAudio.event.error, error);
 	
 	this.audio.setVolume(this.options.volume);
 	this.setPlaylist(this.options.playlist);
@@ -154,6 +225,7 @@ fmPlayer = function (container, options) {
 
 fmPlayer.event = {
 	playlist: 'playlist',
+	media: 'media',
 	stop: 'stop'
 };
 
@@ -162,6 +234,8 @@ fmPlayer.prototype = {
 	audio: null,
 	
 	playback: null,
+	_prev: null,
+	_next: null,
 	begin: null,
 	end: null,
 	bar: null,
@@ -190,96 +264,70 @@ fmPlayer.prototype = {
 	playlist: [],
 	currentTrack: 0,
 	
+	getCurrentTrack: function() {
+		return this.currentTrack;
+	},
+	
 	setPlaylist: function(playlist) {
 		
 		this.playlist = playlist;
 		this.currentTrack = 0;
 		
-		if (this.playlist.length) {
-			
-			this.playback.addClass('enabled');
-			this.begin.addClass('enabled');
-			this.end.addClass('enabled');
-			this.bar.addClass('enabled');
-			
-		} else {
-			
-			this.playback.removeClass('enabled');
-			this.begin.removeClass('enabled');
-			this.end.removeClass('enabled');
-			this.bar.removeClass('enabled');
-		}
-		
 		this.audio.trigger(fmPlayer.event.playlist);
-	},
-	
-	getCurrentTrack: function() {
-		return this.currentTrack;
 	},
 	
 	play: function(track) {
 		
-		if (track == undefined) {
+		if (track == undefined || track < 0) {
 			track = 0;
 		}
 		
 		if (track < this.playlist.length) {
 			
 			this.currentTrack = parseInt(track);
-			
 			this.audio.setMedia(this.playlist[track]);
 			
-			this.playback.addClass('pause');
+			this.audio.trigger(fmPlayer.event.media);
+			
+		} else {
+			stop();
 		}
+	},
+	
+	prev: function() {
+		this.play(this.currentTrack - 1);
+	},
+	
+	next: function() {
+		this.play(this.currentTrack + 1);
 	},
 	
 	pause: function() {
 		
-		if (this.audio.getMedia() != null) {
-			
+		if (this.audio.hasMedia()) {
 			this.audio.pause();
-			this.playback.removeClass('pause');
 		}
 	},
 	
 	resume: function() {
 		
-		if (this.audio.getMedia() != null) {
-			
+		if (this.audio.hasMedia()) {
 			this.audio.play();
-			this.playback.addClass('pause');
 		}
 	},
 	
 	seek: function(sec) {
 		
-		if (this.audio.getMedia() != null) {
-			
+		if (this.audio.hasMedia()) {
 			this.audio.setCurrentTime(sec);
-		}
-	},
-	
-	next: function() {
-		
-		if (this.currentTrack + 1 < this.playlist.length) {
-			
-			this.play(this.currentTrack + 1);
-			
-		} else {
-			this.stop();
 		}
 	},
 	
 	stop: function() {
 		
-		if (this.audio.getMedia() != null) {
+		if (this.audio.hasMedia()) {
 			
 			this.audio.setMedia();
-			
-			this.playback.removeClass('pause');
-			this._seek.removeClass('playing');
-			this.loaded.css('width', '0');
-			this.played.css('width', '0');
 			
 			this.audio.trigger(fmPlayer.event.stop);
 		}

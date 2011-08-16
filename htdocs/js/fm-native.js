@@ -29,6 +29,10 @@ fmNative = function(container) {
 
 fmNative.prototype = new fmAudio;
 
+fmNative.isSupported = function() {
+	return $('<audio />').get(0).canPlayType('audio/mpeg; codecs="mp3"');
+}
+
 fmNative.prototype.setVolume = function(volume) {
 	this.audio.volume = volume;
 };
@@ -41,8 +45,8 @@ fmNative.prototype.setMedia = function(src) {
 	this.audio.src = (src == undefined ? null : src);
 };
 
-fmNative.prototype.getMedia = function() {
-	return (this.audio.src == '' ? null : this.audio.src); 
+fmNative.prototype.hasMedia = function() {
+	return this.audio.src != ''; 
 };
 
 fmNative.prototype.getBuffered = function() {
@@ -71,6 +75,10 @@ fmNative.prototype.pause = function() {
 
 fmNative.prototype.setCurrentTime = function(currentTime) {
 	this.audio.currentTime = currentTime;
+};
+
+fmNative.prototype.getErrorCode = function() {
+	return this.audio.error.code;
 };
 
 //debug trigger

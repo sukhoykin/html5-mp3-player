@@ -1,14 +1,14 @@
 html {
-	height: 100%;
-	overflow: hidden;
+	/*height: 100%;
+	overflow: hidden;*/
 }
 
 body {
 	font-family: Verdana, Arial, Sans-Serif;
 	font-size: 12px;
 	margin: 0;
-	overflow: hidden;
-	height: 100%;
+	/*overflow: hidden;
+	height: 100%;*/
 }
 
 a:visited {
@@ -16,7 +16,11 @@ a:visited {
 }
 
 .player-layout {
+	background-color: #fff;
+	width: 100%;
 	height: 32px;
+	position: fixed;
+	top: 0;
 }
 
 #fm-player {
@@ -80,28 +84,66 @@ a:visited {
 	background-position: -32px -64px;
 }
 
+#prev.button {
+	background-position: -64px 0;
+	float: left;
+	cursor: default;
+}
+
+#prev.button.enabled {
+	background-position: -64px -32px;
+	cursor: pointer;
+}
+
+#prev.button.enabled:hover {
+	background-position: -64px -64px;
+}
+
+#prev.button.enabled:active {
+	background-position: -64px -96px;
+}
+
+#next.button {
+	background-position: -96px 0;
+	float: right;
+	cursor: default;
+}
+
+#next.button.enabled {
+	background-position: -96px -32px;
+	cursor: pointer;
+}
+
+#next.button.enabled:hover {
+	background-position: -96px -64px;
+}
+
+#next.button.enabled:active {
+	background-position: -96px -96px;
+}
+
 .player-layout .progress {
 	height: 100%;
 }
 
 #begin {
-	background: url("pixel.png") no-repeat scroll -192px -32px;
-	width: 8px;
+	background: url("pixel.png") no-repeat scroll -196px -32px;
+	width: 4px;
 	height: 32px;
 	float: left;
 }
 
 #begin.enabled {
-	background-position: -192px -64px;
+	background-position: -196px -64px;
 }
 
 #begin.enabled.hover {
-	background-position: -192px -96px;
+	background-position: -196px -96px;
 }
 
 #end {
 	background: url("pixel.png") no-repeat scroll -216px -32px;
-	width: 8px;
+	width: 4px;
 	height: 32px;
 	float: right;
 }
@@ -115,7 +157,7 @@ a:visited {
 }
 
 #bar {
-	background: url("pixel-bar.png") repeat-x scroll 0 0;
+	background: url("pixel-xscale.png") repeat-x scroll 0 0;
 	height: 32px;
 	position: relative;
 	overflow: hidden;
@@ -147,7 +189,7 @@ a:visited {
 }
 
 #played {
-	background: url("pixel-play.png") repeat-x scroll 0 0;
+	background: url("pixel-xscale.png") repeat-x scroll 0 -96px;
 	width: 0px;
 	height: 8px;
 	position: absolute;
@@ -195,43 +237,23 @@ a:visited {
 	background-position: -192px 0;
 }
 
-.playlist-layout {
-	/*height: 100%;*/
+.playlist-select ul {
+	padding: 0px;
+	margin: 32px 0px 10px 0px;
 }
 
-.playlist-layout .left {
-	width: 25%;
-	height: 100%;
-	float: left;
-}
-
-.playlist-layout h2 {
-	font-size: 16px;
-}
-
-.playlist-layout .left h2 {
-	margin-left: 6px;
-}
-
-.playlist-layout .playlist {
-	height: 100%;
-	overflow: hidden;
-}
-
-.playlist-layout .right {
-	width: 25%;
-	height: 100%;
-	float: right;
+.playlist-select li {
+	font-size: 24px;
+	padding-left: 30px;
+	display: inline;
 }
 
 #fm-playlist {
-	height: 100%;
-	overflow: auto;
 }
 
 #fm-playlist .playtable {
 	width: 100%;
-	-moz-user-select: none';
+	-moz-user-select: none;
 	-webkit-user-select: none;
 	user-select: none;
 }
@@ -243,11 +265,12 @@ a:visited {
 
 #fm-playlist .playtable .playing-col {
 	border-right: 1px solid #ccc;
-	width: 24px;
+	width: 22px;
 }
 
 #fm-playlist .playtable .artist-col {
 	border-right: 1px solid #ccc;
+	width: 30%;
 	padding: 4px;
 }
 
@@ -264,14 +287,19 @@ a:visited {
 	background-color: #CBD2E2;
 }
 
+#fm-playlist .playtable .item.playing {
+	background-color: #537cdb;
+	color: #fff;
+}
+
 #fm-playlist .playtable .item .playing {
-	background: url("pixel-playlist.png") no-repeat scroll 0 0;
-	width: 16px;
+	background: url("pixel.png") no-repeat scroll -224px 0;
+	width: 14px;
 	height: 14px;
 }
 
 #fm-playlist .playtable .item .paused {
-	background: url("pixel-playlist.png") no-repeat scroll 0 -14px;
-	width: 16px;
+	background: url("pixel.png") no-repeat scroll -224px -14px;
+	width: 14px;
 	height: 14px;
 }

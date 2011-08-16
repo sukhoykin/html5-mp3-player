@@ -11,6 +11,10 @@ fmAudio = function(container) {
 	this.container = container;
 };
 
+fmAudio.isSupported = function() {
+	alert('fmAudio.isSupported() is not implemented');
+}
+
 fmAudio.prototype = {
 	
 	container: null,
@@ -27,8 +31,8 @@ fmAudio.prototype = {
 		alert('fmAudio.src() is not implemented');
 	},
 	
-	getMedia: function() {
-		alert('fmAudio.getMedia() is not implemented');
+	hasMedia: function() {
+		alert('fmAudio.hasMedia() is not implemented');
 	},
 	
 	getBuffered: function() {
@@ -58,12 +62,14 @@ fmAudio.prototype = {
 	setCurrentTime: function(sec) {
 		alert('fmAudio.setCurrentTime() is not implemented');
 	},
+	
+	getErrorCode: function(sec) {
+		alert('fmAudio.getErrorCode() is not implemented');
+	},
 
 	trigger: function(eventType) {
 		
-		var event = $.Event(eventType);
-		
-		$(this.container).trigger(event);
+		$(this.container).trigger($.Event(eventType));
 	}
 };
 
