@@ -268,6 +268,14 @@ fmPlayer.prototype = {
 		return this.currentTrack;
 	},
 	
+	getDuration: function() {
+		return this.audio.getDuration();
+	},
+	
+	getCurrentTime: function() {
+		return this.audio.getCurrentTime();
+	},
+	
 	setPlaylist: function(playlist) {
 		
 		this.playlist = playlist;
