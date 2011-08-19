@@ -5,26 +5,9 @@
  * @author vadim
  */
 
-fmLegacy = function(container, playlist) {
-	
-	var self = this;
+fmLegacy = function(container) {
 	
 	fmAudio.call(this, container);
-	
-	var object = $('<div id="fm-legacy-object" />').get(0);
-	
-	$(this.container).html(object);
-	
-	swfobject.embedSWF(
-		'js/player.swf',
-		'fm-legacy-object',
-		'1',
-		'1',
-		fmLegacy.version,
-		false,
-		{id: container.id},
-		{allowScriptAccess: 'sameDomain'}
-	);
 };
 
 fmLegacy.prototype = new fmAudio;
@@ -36,15 +19,34 @@ fmLegacy.isSupported = function() {
 };
 
 fmLegacy.prototype.getObject = function() {
-	return document['fm-legacy-object'];
+	return document['fm_legacy_object'];
 };
 
 fmLegacy.prototype.initialVolume = null;
+
+fmLegacy.prototype.init = function() {
+	
+	var object = $('<div id="fm_legacy_object" />').get(0);
+	
+	$(this.container).html(object);
+	
+	swfobject.embedSWF(
+		'js/player.swf',
+		'fm_legacy_object',
+		'320',
+		'240',
+		fmLegacy.version,
+		false,
+		{id: this.container.id},
+		{allowScriptAccess: 'sameDomain'}
+	);
+};
 
 fmLegacy.prototype.setVolume = function(volume) {
 	
 	if (this.getObject() != undefined && this.getObject().setVolume != undefined) {
 		this.getObject().setVolume(volume);
+		//this.trigger(fmAudio.event.volumechange);
 	} else {
 		this.initialVolume = volume;
 	}
@@ -83,7 +85,7 @@ fmLegacy.prototype.isPaused = function() {
 },
 
 fmLegacy.prototype.play = function() {
-	this.getObject().play(); 
+	this.getObject()._play(); 
 };
 
 fmLegacy.prototype.pause = function() {

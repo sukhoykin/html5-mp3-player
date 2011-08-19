@@ -4,11 +4,14 @@ package {
 	
 	import flash.text.TextField;
 	
+	import flash.utils.Timer;
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
 	import flash.media.SoundTransform;
 	import flash.net.URLRequest;
 	import flash.events.Event;
+	import flash.events.TimerEvent;
+	import flash.events.IOErrorEvent;
 	import flash.events.ProgressEvent;
 	import flash.events.NetStatusEvent;
 	import flash.events.AsyncErrorEvent;
@@ -20,6 +23,9 @@ package {
 	
 	public class Player extends Sprite {
 		
+		private var timer : Timer = new Timer(100);
+		private var triggerTimer : Timer = new Timer(30);
+		
 		private var sound : Sound = null;
 		private var channel : SoundChannel = null;
 		
@@ -29,20 +35,50 @@ package {
 		private var volume : Number;
 		private var position : Number = 0;
 		
+		private var errorCode : int = 0;
+		
 		private var debug : TextField = new TextField();
 		
 		private static const audio_api : Array = new Array(
 			'setVolume', 'getVolume',
 			'setMedia', 'hasMedia',
 			'getBuffered', 'getDuration', 'getCurrentTime',
-			'isPaused', 'play', 'pause',
+			'isPaused', '_play', 'pause',
 			'setCurrentTime',
 			'getErrorCode'
 		);
 		
 		public function Player() {
 			
+			addChild(debug);
+			
+			debug.x = 0;
+			debug.y = 0;
+			debug.width = 320;
+			debug.height = 240;
+			
+			log('ExternalInterface: ' + ExternalInterface.available.toString());
+			
 			Security.allowDomain('*');
+			
+			timer.addEventListener(TimerEvent.TIMER, init);
+			timer.start();
+			
+			
+		}
+		
+		private function init(e : TimerEvent) : void {
+			
+			log('init');
+			
+			if (ExternalInterface.call("jQuery('#" + loaderInfo.parameters.id + "').fmPlayer", 'method', 'getInitialVolume') == undefined) {
+				log('not ready');
+				return;
+			}
+			
+			timer.stop();
+			
+			log('getInitialVolume: ' + ExternalInterface.call("jQuery('#" + loaderInfo.parameters.id + "').fmPlayer", 'method', 'getInitialVolume'));
 			
 			for each (var method : String in audio_api) {
 				ExternalInterface.addCallback(method, this[method]);
@@ -57,34 +93,39 @@ package {
 			setVolume(
 				ExternalInterface.call("jQuery('#" + loaderInfo.parameters.id + "').fmPlayer", 'method', 'getInitialVolume')
 			);
-			
-			addChild(debug);
-			
-			debug.x = 0;
-			debug.y = 0;
-			debug.width = 320;
-			debug.height = 240;
 		}
 		
 		private function setVolume(volume : Number) : void {
 			
+			if (volume > 1) volume = 1;
+			
 			log('setVolume: ' + volume);
 			
-			if (volume > 1) return;
-			
 			this.volume = volume;
-			
-			log('isPaused: ' + isPaused());
 			
 			if (!isPaused()) {
 				var soundTransform : SoundTransform = new SoundTransform(volume);
 				channel.soundTransform = soundTransform;
 			}
 			
+			/**
+			 * Could not call Flash methods from JS through direct trigger, timers used.
+			 */
+			triggerTimer.addEventListener(TimerEvent.TIMER, triggerVolumeChange);
+			triggerTimer.start();
+		}
+		
+		public function triggerVolumeChange(e : TimerEvent) : void {
+			
+			log('triggerVolumeChange');
+			
+			triggerTimer.removeEventListener(TimerEvent.TIMER, triggerVolumeChange);
+			triggerTimer.stop();
 			dispatchEvent(new Event(PlayerEvent.volumechange));
 		}
 		
 		private function getVolume() : Number {
+			log('getVolume');
 			return volume;
 		}
 		
@@ -112,6 +153,7 @@ package {
 			sound = new Sound();
 			
 			sound.addEventListener(Event.OPEN, soundOpen);
+			sound.addEventListener(IOErrorEvent.IO_ERROR, soundError);
 			sound.addEventListener(Event.ID3, soundId3);
 			sound.addEventListener(ProgressEvent.PROGRESS, soundProgress);
 			sound.addEventListener(Event.COMPLETE, soundLoadComplete);
@@ -139,7 +181,7 @@ package {
 			return channel == null;
 		}
 		
-		private function play() : void {
+		private function _play() : void {
 			
 			dispatchEvent(new Event(PlayerEvent.play));
 			
@@ -191,10 +233,11 @@ package {
 		
 		private function getErrorCode() : Number {
 			
-			return -1;
+			return errorCode;
 		}
 		
 		public function playerEvent(event : Event) : void {
+			log('#' + event.type);
 			ExternalInterface.call("jQuery('#" + loaderInfo.parameters.id + "').fmPlayer", 'event', event.type);
 		}
 		
@@ -212,6 +255,12 @@ package {
 			log('soundOpen');
 			canplay = false;
 			dispatchEvent(new Event(PlayerEvent.loadstart));
+		}
+		
+		public function soundError(event : IOErrorEvent) : void {
+			log('soundError');
+			errorCode = 2;
+			dispatchEvent(new Event(PlayerEvent.error));
 		}
 		
 		public function soundId3(event : Event) : void {
@@ -237,6 +286,7 @@ package {
 		public function soundLoadComplete(event : Event) : void {
 			log('soundLoadComplete');
 			loading = false;
+			dispatchEvent(new Event(PlayerEvent.progress));
 		}
 		
 		public function soundComplete(event : Event) : void {

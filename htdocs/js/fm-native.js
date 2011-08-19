@@ -6,9 +6,23 @@
  */
 fmNative = function(container) {
 	
-	var self = this;
-	
 	fmAudio.call(this, container);
+};
+
+fmNative.prototype = new fmAudio;
+
+fmNative.isSupported = function() {
+	
+	try {
+		return new Audio().canPlayType('audio/mpeg; codecs="mp3"');
+	} catch(e) {
+		return false;
+	}
+}
+
+fmNative.prototype.init = function() {
+	
+	var self = this;
 	
 	this.audio = $('<audio />').get(0);
 	
@@ -26,12 +40,6 @@ fmNative = function(container) {
 	
 	this.debugAudio();
 };
-
-fmNative.prototype = new fmAudio;
-
-fmNative.isSupported = function() {
-	return $('<audio />').get(0).canPlayType('audio/mpeg; codecs="mp3"');
-}
 
 fmNative.prototype.setVolume = function(volume) {
 	this.audio.volume = volume;

@@ -11,7 +11,6 @@
  * player = $(id).data(id);
  * 
  * TODO: errors processing
- * TODO: prev/next button
  * TODO: loop track
  * TODO: loop playlist
  * TODO: shuffle
@@ -19,12 +18,15 @@
  * TODO: playlist scroll
  * TODO: favicon (play/pause)
  * TODO: seek + load part
- * TODO: flash implementation
  * TODO: seek button
  * TODO: currentTime/duration
  * TODO: playlist-html-js: donor as diplay none blocks from HTML to JS
  * TODO: scroll playlist to playing track
  * TODO: crossfade
+ * TODO: playlist entity
+ * TODO: all id names without -, use _ instead
+ * TODO: playlist edit: drag 1 track, shift+click - drag multiple tracks
+ * 
  * @author vadim
  */
 (function ( $ ) {
@@ -33,29 +35,28 @@
 		
 		if (typeof options === 'string') {
 
-			var audio = $('#fm-player').data('fm-player').getAudio();
+			var value;
+			var args = arguments;
 			
-			if (options == 'method') {
+			this.each(function(){
 				
-				//alert(audio.getVolume());
-				//return $('#fm-player').data('fm-player').getAudio().getVolume();
-				return audio[arguments[1]].apply(audio, Array.prototype.slice.call(arguments, 2));
+				var audio = $.data(this, this.id).getAudio();
 				
-				/*
-				this.each(function(){
+				if (options == 'method') {
 					
-				});*/
-			} else if (options == 'event') {
-				audio.trigger(arguments[1]);
-				//document['fm-legacy-object'].setVolume('0.321');
-				return;
-			}
+					value = audio[args[1]].apply(audio, Array.prototype.slice.call(args, 2));
+					
+				} else if (options == 'event') {
+					
+					audio.trigger(args[1]);
+				}
+			});
+			
+			return value;
 		}
 		
-		
-		
 		this.each(function(){
-			$.data(this, this.id, new fmPlayer(this, options));
+			$.data(this, this.id, new fmPlayer(this, options));			
 		});
 		
 		return this;
@@ -79,6 +80,8 @@ fmPlayer = function (container, options) {
 	} else {
 		alert('Your browser can not play MP3.');
 	}
+	
+	this.audio.init();
 	
 	var playbackClick = function() {
 		
@@ -104,7 +107,6 @@ fmPlayer = function (container, options) {
 	};
 	
 	var seekClick = function(offsetLeft, e) {
-		//alert(e.pageX + ',' + offsetLeft);
 		self.seek((e.pageX - offsetLeft) / $(self.options.layout.bar).width() * self.audio.getDuration());
 	};
 	
@@ -119,8 +121,6 @@ fmPlayer = function (container, options) {
 	};
 	
 	var volumeClick = function(offsetLeft, e) {
-		//self.audio.setVolume((e.offsetX - 4) / ($(self.volume).width() - 8));
-		//alert((e.pageX - offsetLeft - 4) / ($(self.volume).width() - 8));
 		self.audio.setVolume((e.pageX - offsetLeft - 4) / ($(self.volume).width() - 8));
 	};
 	
@@ -202,6 +202,8 @@ fmPlayer = function (container, options) {
 	};
 	
 	var ended = function() {
+		
+		self.played.css('width', $(self.options.layout.bar).width() + 'px');
 		
 		self.next();
 	};

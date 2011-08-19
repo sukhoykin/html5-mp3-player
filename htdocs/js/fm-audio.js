@@ -19,6 +19,10 @@ fmAudio.prototype = {
 	
 	container: null,
 
+	init: function() {
+		alert('fmAudio.init() is not implemented');
+	},
+	
 	setVolume: function(volume) {
 		alert('fmAudio.setVolume() is not implemented');
 	},

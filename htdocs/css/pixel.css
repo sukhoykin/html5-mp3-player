@@ -27,10 +27,10 @@ a:visited {
 	/*display: none;*/
 }
 
-#fm-legacy-object {
+#fm_legacy_object {
 	position: fixed;
-	/*right: 0;
-	bottom: 0;*/
+	right: 0;
+	bottom: 0;
 }
 
 #fm-debug {
