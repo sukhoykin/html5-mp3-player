@@ -24,11 +24,35 @@
  * TODO: currentTime/duration
  * TODO: playlist-html-js: donor as diplay none blocks from HTML to JS
  * TODO: scroll playlist to playing track
+ * TODO: crossfade
  * @author vadim
  */
 (function ( $ ) {
 	
 	$.fn.fmPlayer = function (options) {
+		
+		if (typeof options === 'string') {
+
+			var audio = $('#fm-player').data('fm-player').getAudio();
+			
+			if (options == 'method') {
+				
+				//alert(audio.getVolume());
+				//return $('#fm-player').data('fm-player').getAudio().getVolume();
+				return audio[arguments[1]].apply(audio, Array.prototype.slice.call(arguments, 2));
+				
+				/*
+				this.each(function(){
+					
+				});*/
+			} else if (options == 'event') {
+				audio.trigger(arguments[1]);
+				//document['fm-legacy-object'].setVolume('0.321');
+				return;
+			}
+		}
+		
+		
 		
 		this.each(function(){
 			$.data(this, this.id, new fmPlayer(this, options));
@@ -50,8 +74,10 @@ fmPlayer = function (container, options) {
 	
 	if (fmNative.isSupported()) {
 		this.audio = new fmNative(container);
+	} else if (fmLegacy.isSupported()) {
+		this.audio = new fmLegacy(container);
 	} else {
-		alert('Your browser can`t playback MP3 using <audio>. Legacy Flash solution is not implemented.');
+		alert('Your browser can not play MP3.');
 	}
 	
 	var playbackClick = function() {
@@ -77,8 +103,9 @@ fmPlayer = function (container, options) {
 		self.next();
 	};
 	
-	var seekClick = function(e) {
-		self.seek(e.offsetX / $(self.options.layout.bar).width() * self.audio.getDuration());
+	var seekClick = function(offsetLeft, e) {
+		//alert(e.pageX + ',' + offsetLeft);
+		self.seek((e.pageX - offsetLeft) / $(self.options.layout.bar).width() * self.audio.getDuration());
 	};
 	
 	var barHoverIn = function() {
@@ -91,8 +118,10 @@ fmPlayer = function (container, options) {
 		self.end.removeClass('hover');
 	};
 	
-	var volumeClick = function(e) {
-		self.audio.setVolume((e.offsetX - 4) / ($(self.volume).width() - 8));
+	var volumeClick = function(offsetLeft, e) {
+		//self.audio.setVolume((e.offsetX - 4) / ($(self.volume).width() - 8));
+		//alert((e.pageX - offsetLeft - 4) / ($(self.volume).width() - 8));
+		self.audio.setVolume((e.pageX - offsetLeft - 4) / ($(self.volume).width() - 8));
 	};
 	
 	var volumeDoubleClick = function() {
@@ -198,8 +227,8 @@ fmPlayer = function (container, options) {
 	this._prev.click(prevClick);
 	this._next.click(nextClick);
 	this.bar.hover(barHoverIn, barHoverOut);
-	this._seek.click(function(e){seekClick(e);});
-	this.volume.click(function(e){volumeClick(e);});
+	this._seek.click(function(e){seekClick(self.bar.get(0).offsetLeft, e);});
+	this.volume.click(function(e){volumeClick(this.offsetLeft, e);});
 	this.volume.dblclick(volumeDoubleClick);
 	
 	$(container).bind(fmPlayer.event.playlist, playlist);
@@ -264,16 +293,12 @@ fmPlayer.prototype = {
 	playlist: [],
 	currentTrack: 0,
 	
+	getAudio: function() {
+		return this.audio;
+	},
+	
 	getCurrentTrack: function() {
 		return this.currentTrack;
-	},
-	
-	getDuration: function() {
-		return this.audio.getDuration();
-	},
-	
-	getCurrentTime: function() {
-		return this.audio.getCurrentTime();
 	},
 	
 	setPlaylist: function(playlist) {
@@ -281,7 +306,7 @@ fmPlayer.prototype = {
 		this.playlist = playlist;
 		this.currentTrack = 0;
 		
-		this.audio.trigger(fmPlayer.event.playlist);
+		this.trigger(fmPlayer.event.playlist);
 	},
 	
 	play: function(track) {
@@ -294,11 +319,11 @@ fmPlayer.prototype = {
 			
 			this.currentTrack = parseInt(track);
 			this.audio.setMedia(this.playlist[track]);
-			
-			this.audio.trigger(fmPlayer.event.media);
+			this.trigger(fmPlayer.event.media);
 			
 		} else {
-			stop();
+			
+			this.stop();
 		}
 	},
 	
@@ -337,7 +362,12 @@ fmPlayer.prototype = {
 			
 			this.audio.setMedia();
 			
-			this.audio.trigger(fmPlayer.event.stop);
+			this.trigger(fmPlayer.event.stop);
 		}
+	},
+
+	trigger: function(eventType) {
+		
+		this.audio.trigger(eventType);
 	}
 };
