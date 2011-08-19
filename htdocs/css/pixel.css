@@ -29,8 +29,8 @@ a:visited {
 
 #fm-legacy-object {
 	position: fixed;
-	right: 0;
-	bottom: 0;
+	/*right: 0;
+	bottom: 0;*/
 }
 
 #fm-debug {

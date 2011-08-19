@@ -5,12 +5,17 @@
 <title>Pixel Theme</title>
 <link href="css/pixel.css" rel="stylesheet" />
 <script type="text/javascript" src="js/jquery.js"></script>
-<!-- <script type="text/javascript" src="js/compiled.js"></script> -->
+<script type="text/javascript" src="js/swfobject.js"></script>
 <script type="text/javascript" src="js/fm-audio.js"></script>
 <script type="text/javascript" src="js/fm-native.js"></script>
+<script type="text/javascript" src="js/fm-legacy.js"></script>
 <script type="text/javascript" src="js/fm-player.js"></script>
 <script type="text/javascript" src="js/fm-playlist.js"></script>
 <script type="text/javascript">
+
+	var test = function() {
+		return '123';
+	};
 
 	var currentPlaylist = null;
 	var demo = {
@@ -140,7 +145,7 @@
 		$('#fm-playlist').fmPlaylist($('#fm-player'));
 		
 		$('.playlist-select-link').click(function(){
-
+			//$('#fm-player').data('fm-player').setVolume('0.4');
 			if (currentPlaylist != null) {
 				$('#' + currentPlaylist).attr('href', '#' + currentPlaylist);
 			}
@@ -157,6 +162,7 @@
 <body>
 	<div class="player-layout">
 		<div id="fm-player"></div>
+		<!-- <embed src="js/player.swf" name="fm-player" align="middle" play="true" loop="false" quality="high" allowScriptAccess="sameDomain" width="100" height="100" scale="exactfit" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed> -->
 		<div id="playback" class="button"></div>
 		<div id="prev" class="button"></div>
 		<div id="volume" class="button"></div>
@@ -206,7 +212,7 @@
 			</tbody>
 		</table>-->
 	</div>
-	<div id="fm-debug"></div>
-	<div id="fm-debug-audio"></div>
+	<!-- <div id="fm-debug"></div>
+	<div id="fm-debug-audio"></div> -->
 </body>
 </html>

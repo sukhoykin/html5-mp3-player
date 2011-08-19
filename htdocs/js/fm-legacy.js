@@ -18,8 +18,8 @@ fmLegacy = function(container, playlist) {
 	swfobject.embedSWF(
 		'js/player.swf',
 		'fm-legacy-object',
-		'320',
-		'240',
+		'1',
+		'1',
 		fmLegacy.version,
 		false,
 		{id: container.id},
