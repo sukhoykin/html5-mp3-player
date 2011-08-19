@@ -33,8 +33,8 @@ fmLegacy.prototype.init = function() {
 	swfobject.embedSWF(
 		'js/player.swf',
 		'fm_legacy_object',
-		'320',
-		'240',
+		'1',
+		'1',
 		fmLegacy.version,
 		false,
 		{id: this.container.id},
