@@ -79,6 +79,9 @@ fmAudio.prototype = {
 
 fmAudio.event = {
 	
+	ready: 'ready',
+	media: 'media',
+	
 	loadstart: 'loadstart',
 	progress: 'progress',
 	suspend: 'suspend',

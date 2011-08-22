@@ -119,6 +119,9 @@ $(document).ready(function(){
 				seek: '#seek',
 				loaded: '#loaded',
 				played: '#played',
+				head: '#head',
+				repeat: '#repeat',
+				shuffle: '#shuffle',
 				volume: '#volume'
 			}
 		}

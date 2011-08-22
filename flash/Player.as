@@ -24,7 +24,7 @@ package {
 	public class Player extends Sprite {
 		
 		private var timer : Timer = new Timer(100);
-		private var triggerTimer : Timer = new Timer(30);
+		private var triggerTimer : Timer = new Timer(20);
 		
 		private var sound : Sound = null;
 		private var channel : SoundChannel = null;
@@ -55,44 +55,32 @@ package {
 			debug.x = 0;
 			debug.y = 0;
 			debug.width = 320;
-			debug.height = 240;
-			
-			log('ExternalInterface: ' + ExternalInterface.available.toString());
+			debug.height = 800;
 			
 			Security.allowDomain('*');
 			
 			timer.addEventListener(TimerEvent.TIMER, init);
 			timer.start();
-			
-			
 		}
 		
 		private function init(e : TimerEvent) : void {
 			
-			log('init');
-			
-			if (ExternalInterface.call("jQuery('#" + loaderInfo.parameters.id + "').fmPlayer", 'method', 'getInitialVolume') == undefined) {
-				log('not ready');
-				return;
-			}
+			log('Flash Solution: init');
+			log('ExternalInterface: ' + ExternalInterface.available.toString());
 			
 			timer.stop();
-			
-			log('getInitialVolume: ' + ExternalInterface.call("jQuery('#" + loaderInfo.parameters.id + "').fmPlayer", 'method', 'getInitialVolume'));
 			
 			for each (var method : String in audio_api) {
 				ExternalInterface.addCallback(method, this[method]);
 			}
 			
 			for each (var event : String in PlayerEvent.list) {
-				addEventListener(event, playerEvent);
+				addEventListener(event, eventProxy);
 			}
 			
 			addEventListener(Event.ENTER_FRAME, enterFrame);
 			
-			setVolume(
-				ExternalInterface.call("jQuery('#" + loaderInfo.parameters.id + "').fmPlayer", 'method', 'getInitialVolume')
-			);
+			dispatchEvent(new Event(PlayerEvent.ready));
 		}
 		
 		private function setVolume(volume : Number) : void {
@@ -109,7 +97,10 @@ package {
 			}
 			
 			/**
-			 * Could not call Flash methods from JS through direct trigger, timers used.
+			 * 1. js calls flash set method 
+			 * 2. flash triggers event on this set
+			 * 3. js on this event calls flash get method
+			 * This doesnt support IE8. Timer is helpful.
 			 */
 			triggerTimer.addEventListener(TimerEvent.TIMER, triggerVolumeChange);
 			triggerTimer.start();
@@ -121,6 +112,7 @@ package {
 			
 			triggerTimer.removeEventListener(TimerEvent.TIMER, triggerVolumeChange);
 			triggerTimer.stop();
+			
 			dispatchEvent(new Event(PlayerEvent.volumechange));
 		}
 		
@@ -159,6 +151,8 @@ package {
 			sound.addEventListener(Event.COMPLETE, soundLoadComplete);
 			
 			sound.load(new URLRequest(src));
+			
+			dispatchEvent(new Event(PlayerEvent.media));
 		}
 		
 		private function hasMedia() : Boolean {
@@ -174,7 +168,11 @@ package {
 		}
 		
 		private function getCurrentTime() : Number {
-			return channel.position / 1000;
+			if (!isPaused()) {
+				return channel.position / 1000;
+			} else {
+				return position;
+			}
 		}
 		
 		private function isPaused() : Boolean {
@@ -228,6 +226,18 @@ package {
 			
 			position = currentTime;
 			
+			triggerTimer.addEventListener(TimerEvent.TIMER, triggerSeeked);
+			triggerTimer.start();
+		}
+		
+		public function triggerSeeked(e : TimerEvent) : void {
+			
+			log('triggerSeeked');
+			
+			triggerTimer.removeEventListener(TimerEvent.TIMER, triggerVolumeChange);
+			triggerTimer.stop();
+			
+			dispatchEvent(new Event(PlayerEvent.timeupdate));
 			dispatchEvent(new Event(PlayerEvent.seeked));
 		}
 		
@@ -236,8 +246,8 @@ package {
 			return errorCode;
 		}
 		
-		public function playerEvent(event : Event) : void {
-			log('#' + event.type);
+		public function eventProxy(event : Event) : void {
+			if (event.type != 'timeupdate') log('#' + event.type);
 			ExternalInterface.call("jQuery('#" + loaderInfo.parameters.id + "').fmPlayer", 'event', event.type);
 		}
 		
@@ -296,7 +306,7 @@ package {
 		}
 		
 		private function log(msg : String) : void {
-			debug.text += msg + "\n";
+			ExternalInterface.call("jQuery('#" + loaderInfo.parameters.id + "').fmPlayer", 'method', 'debug', msg);
 		}
 	}
 }

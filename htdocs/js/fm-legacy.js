@@ -22,8 +22,6 @@ fmLegacy.prototype.getObject = function() {
 	return document['fm_legacy_object'];
 };
 
-fmLegacy.prototype.initialVolume = null;
-
 fmLegacy.prototype.init = function() {
 	
 	var object = $('<div id="fm_legacy_object" />').get(0);
@@ -33,8 +31,8 @@ fmLegacy.prototype.init = function() {
 	swfobject.embedSWF(
 		'js/player.swf',
 		'fm_legacy_object',
-		'1',
-		'1',
+		'0',
+		'0',
 		fmLegacy.version,
 		false,
 		{id: this.container.id},
@@ -44,16 +42,7 @@ fmLegacy.prototype.init = function() {
 
 fmLegacy.prototype.setVolume = function(volume) {
 	
-	if (this.getObject() != undefined && this.getObject().setVolume != undefined) {
-		this.getObject().setVolume(volume);
-		//this.trigger(fmAudio.event.volumechange);
-	} else {
-		this.initialVolume = volume;
-	}
-};
-
-fmLegacy.prototype.getInitialVolume = function() {
-	return this.initialVolume;
+	this.getObject().setVolume(volume);
 };
 
 fmLegacy.prototype.getVolume = function() {
@@ -98,16 +87,4 @@ fmLegacy.prototype.setCurrentTime = function(currentTime) {
 
 fmLegacy.prototype.getErrorCode = function() {
 	return this.getObject().getErrorCode();
-};
-
-//debug trigger
-fmLegacy.prototype.trigger = function(eventType) {
-	
-	fmAudio.prototype.trigger.call(this, eventType);
-	
-	//this.debugAudio();
-	
-	if (eventType == 'timeupdate') return;
-	//debug
-	$('#fm-debug').append(eventType + '<br />');
 };

@@ -3,6 +3,9 @@
 
 	class PlayerEvent extends Event {
 		
+		public static const ready : String = 'ready';
+		public static const media : String = 'media';
+		
 		public static const loadstart : String = 'loadstart';
 		public static const progress : String = 'progress';
 		public static const suspend : String = 'suspend';
@@ -30,6 +33,7 @@
 		public static const volumechange : String = 'volumechange';
 
 		public static const list : Array = new Array(
+			'ready', 'media',
 			'loadstart', 'progress', 'suspend', 'abort', 'error', 'emptied', 'stalled',
 			'loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough', 'playing', 'waiting',
 			'seeking', 'seeked', 'ended',
