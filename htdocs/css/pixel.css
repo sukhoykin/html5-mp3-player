@@ -28,12 +28,6 @@ a:visited {
 	height: 0px;
 }
 
-#fm_legacy_object {
-	/*position: fixed;
-	right: 0;
-	bottom: 0;*/
-}
-
 #fm-debug {
 	border: 1px dotted #333;
 	font-family: Arial;

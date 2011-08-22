@@ -45,7 +45,7 @@
 			this.each(function(){
 				
 				var audio = $.data(this, this.id).getAudio();
-				console.log(options + ': ' + args[1]);
+				
 				if (options == 'method' && $.isFunction(audio[args[1]])) {
 					
 					value = audio[args[1]].apply(audio, Array.prototype.slice.call(args, 2));
@@ -96,12 +96,7 @@ fmPlayer = function (container, options) {
 		self.next();
 	};
 	
-	/**
-	 * TODO: remove offsetLeft
-	 */
-	var seekClick = function(offsetLeft, e) {
-		
-		console.log(e.pageX, self._bar.offset().left, self._bar.width(), self.getDuration());
+	var seekClick = function(e) {
 		self.seek((e.pageX - self._bar.offset().left) / self._bar.width() * self.getDuration());
 	};
 	
@@ -175,21 +170,12 @@ fmPlayer = function (container, options) {
 		self.shuffle();
 	};
 	
-	/**
-	 * TODO: remove volumechange() call.
-	 * TODO: volume method.
-	 * TODO: $(self._volume) to self._volume
-	 * TODO: remove offsetLeft
-	 */
-	var volumeClick = function(offsetLeft, e) {
-		console.log('volumeClick');
+	var volumeClick = function(e) {
 		self.volume((e.pageX - self._volume.offset().left - 4) / (self._volume.width() - 8));
-		//volumechange();
 	};
 	
 	var volumeDoubleClick = function() {
 		self.volume(0);
-		//volumechange();
 	};
 	
 	/**
@@ -270,7 +256,7 @@ fmPlayer = function (container, options) {
 	
 	var playing = function() {
 		
-		self._seek.click(function(e){seekClick(self._bar.get(0).offsetLeft, e);});
+		self._seek.click(seekClick);
 		
 		self._head.addClass('enabled');
 	};
@@ -572,26 +558,6 @@ fmPlayer.prototype = {
 			
 		} else {
 			this.play(this.currentTrack + 1);
-		}
-	},
-	
-	/**
-	 * @deprecated use playback instead.
-	 */
-	pause: function() {
-		
-		if (this.audio.hasMedia()) {
-			this.audio.pause();
-		}
-	},
-	
-	/**
-	 * @deprecated use playback instead.
-	 */
-	resume: function() {
-		
-		if (this.audio.hasMedia()) {
-			this.audio.play();
 		}
 	},
 	
