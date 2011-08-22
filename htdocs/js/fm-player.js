@@ -84,7 +84,6 @@ fmPlayer = function (container, options) {
 	 * Control handlers.
 	 */
 	var playbackClick = function() {
-		console.log('playbackClick');
 		self.playback();
 	};
 	
@@ -186,7 +185,7 @@ fmPlayer = function (container, options) {
 	 */
 	
 	var ready = function() {
-		console.log('fmPlayer.ready');
+		
 		self.is_ready = true;
 		
 		self._volume.click(volumeClick);
@@ -213,7 +212,7 @@ fmPlayer = function (container, options) {
 		self._shuffle.unbind('click');
 		
 		if (self.playlist.length) {
-			console.log('fmPlayer.enable');
+			
 			self._playback.click(playbackClick);
 			self._prev.click(prevClick);
 			self._next.click(nextClick);
@@ -476,8 +475,6 @@ fmPlayer.prototype = {
 		if (volume < 0) volume = 0;
 		if (volume > 1) volume = 1;
 		
-		console.log('volume: ' + volume);
-		
 		if (volume != undefined) {
 			this.audio.setVolume(volume);
 		} else {
@@ -570,7 +567,7 @@ fmPlayer.prototype = {
 	},
 	
 	seek: function(sec) {
-		console.log('seek: ' + sec);
+		
 		if (this.audio.hasMedia()) {
 			this.audio.setCurrentTime(sec);
 		}
