@@ -170,6 +170,9 @@ fmPlayer = function (container, options) {
 		self.shuffle();
 	};
 	
+	/**
+	 * TODO: set volume fix
+	 */
 	var volumeClick = function(e) {
 		self.volume((e.pageX - self._volume.offset().left - 4) / (self._volume.width() - 8));
 	};
@@ -186,7 +189,7 @@ fmPlayer = function (container, options) {
 		console.log('fmPlayer.ready');
 		self.is_ready = true;
 		
-		self._volume.click(function(e){volumeClick(this.offsetLeft, e);});
+		self._volume.click(volumeClick);
 		self._volume.dblclick(volumeDoubleClick);
 		
 		self.volume(self.options.volume);
@@ -469,6 +472,11 @@ fmPlayer.prototype = {
 	},
 	
 	volume: function(volume) {
+		
+		if (volume < 0) volume = 0;
+		if (volume > 1) volume = 1;
+		
+		console.log('volume: ' + volume);
 		
 		if (volume != undefined) {
 			this.audio.setVolume(volume);
