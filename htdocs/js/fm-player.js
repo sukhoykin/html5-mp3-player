@@ -388,8 +388,6 @@ fmPlayer = function (container, options) {
 		alert('Your browser can not play MP3.');
 		return;
 	}
-	
-	this.audio.init();
 };
 
 fmPlayer.event = {
@@ -448,6 +446,10 @@ fmPlayer.prototype = {
 	is_shuffle: false,
 	shuffleOrder: null,
 	shuffleCurrentTrack: 0,
+	
+	init: function() {
+		this.audio.init();
+	},
 	
 	getAudio: function() {
 		return this.audio;
