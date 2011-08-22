@@ -18,11 +18,22 @@ fmLegacy.isSupported = function() {
 	return swfobject.hasFlashPlayerVersion(fmLegacy.version);
 };
 
+fmLegacy.prototype.trigger = function(eventType) {
+	
+	fmAudio.prototype.trigger.call(this, eventType);
+	
+	if (eventType == 'timeupdate') return;
+
+	console.log(eventType);
+};
+
 fmLegacy.prototype.getObject = function() {
 	return document['fm_legacy_object'];
 };
 
 fmLegacy.prototype.init = function() {
+	
+	console.log('fmLegacy.init');
 	
 	var object = $('<div id="fm_legacy_object" />').get(0);
 	
@@ -36,9 +47,15 @@ fmLegacy.prototype.init = function() {
 		fmLegacy.version,
 		false,
 		{id: this.container.id},
-		{allowScriptAccess: 'sameDomain'}
+		{allowScriptAccess: 'sameDomain'},
+		{},
+		embedSWF
 	);
 };
+
+embedSWF = function(e) {
+	console.log(e);
+}
 
 fmLegacy.prototype.setVolume = function(volume) {
 	

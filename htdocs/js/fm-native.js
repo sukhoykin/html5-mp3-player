@@ -20,6 +20,15 @@ fmNative.isSupported = function() {
 	}
 }
 
+fmNative.prototype.trigger = function(eventType) {
+	
+	fmAudio.prototype.trigger.call(this, eventType);
+	
+	if (eventType == 'timeupdate') return;
+	
+	console.log(eventType);
+};
+
 fmNative.prototype.init = function() {
 	
 	var self = this;

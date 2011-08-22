@@ -45,7 +45,7 @@
 			this.each(function(){
 				
 				var audio = $.data(this, this.id).getAudio();
-				
+				console.log(options + ': ' + args[1]);
 				if (options == 'method' && $.isFunction(audio[args[1]])) {
 					
 					value = audio[args[1]].apply(audio, Array.prototype.slice.call(args, 2));
@@ -84,6 +84,7 @@ fmPlayer = function (container, options) {
 	 * Control handlers.
 	 */
 	var playbackClick = function() {
+		console.log('playbackClick');
 		self.playback();
 	};
 	
@@ -95,8 +96,13 @@ fmPlayer = function (container, options) {
 		self.next();
 	};
 	
+	/**
+	 * TODO: remove offsetLeft
+	 */
 	var seekClick = function(offsetLeft, e) {
-		self.seek((e.pageX - offsetLeft) / self._bar.width() * self.getDuration());
+		
+		console.log(e.pageX, self._bar.offset().left, self._bar.width(), self.getDuration());
+		self.seek((e.pageX - self._bar.offset().left) / self._bar.width() * self.getDuration());
 	};
 	
 	var barMouseEnter = function() {
@@ -173,9 +179,11 @@ fmPlayer = function (container, options) {
 	 * TODO: remove volumechange() call.
 	 * TODO: volume method.
 	 * TODO: $(self._volume) to self._volume
+	 * TODO: remove offsetLeft
 	 */
 	var volumeClick = function(offsetLeft, e) {
-		self.volume((e.pageX - offsetLeft - 4) / (self._volume.width() - 8));
+		console.log('volumeClick');
+		self.volume((e.pageX - self._volume.offset().left - 4) / (self._volume.width() - 8));
 		//volumechange();
 	};
 	
@@ -189,7 +197,7 @@ fmPlayer = function (container, options) {
 	 */
 	
 	var ready = function() {
-		
+		console.log('fmPlayer.ready');
 		self.is_ready = true;
 		
 		self._volume.click(function(e){volumeClick(this.offsetLeft, e);});
@@ -216,7 +224,7 @@ fmPlayer = function (container, options) {
 		self._shuffle.unbind('click');
 		
 		if (self.playlist.length) {
-			
+			console.log('fmPlayer.enable');
 			self._playback.click(playbackClick);
 			self._prev.click(prevClick);
 			self._next.click(nextClick);
@@ -339,6 +347,7 @@ fmPlayer = function (container, options) {
 	
 	var error = function() {
 		alert('Media error code: ' + self.audio.getErrorCode());
+		self.stop();
 	};
 	
 	/**
@@ -587,7 +596,7 @@ fmPlayer.prototype = {
 	},
 	
 	seek: function(sec) {
-		
+		console.log('seek: ' + sec);
 		if (this.audio.hasMedia()) {
 			this.audio.setCurrentTime(sec);
 		}
