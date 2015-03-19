@@ -1,7 +1,0 @@
-# Deployment list consists lines in following format
-# SERVER
-# where:
-# - SERVER: hostname of the server where project will be deployed;
-# Server must be added in girar, in specified location.
-# To see server list use girar command "servers".
-fenrir.immo
